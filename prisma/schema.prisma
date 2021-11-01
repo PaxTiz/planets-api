@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model constellation {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(100)
+  galaxy galaxy[]
+}
+
+model galaxy {
+  id                             Int            @id @default(autoincrement())
+  name                           String         @db.VarChar(100)
+  constellationId                Int?
+  constellation                  constellation? @relation(fields: [constellationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_be350151d5d7713d748192b067a")
+  planets                        planet[]
+  @@index([constellationId], map: "FK_be350151d5d7713d748192b067a")
+}
+
+model planet {
+  id                             Int            @id @default(autoincrement())
+  name                           String         @db.VarChar(100)
+  description                    String         @db.Text
+  image                          String?        @db.VarChar(255)
+  sun_distance_ly                Float          @db.Float
+  sun_distance_km                Int
+  composition                    String?        @db.LongText
+  galaxyId                       Int?
+  galaxy                         galaxy?        @relation(fields: [galaxyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7f8df2c355a7427e7df464808d3")
+  planet_views                   planet_views[]
+
+  @@index([galaxyId], map: "FK_7f8df2c355a7427e7df464808d3")
+}
+
+model planet_views {
+  id       Int     @id @default(autoincrement())
+  count    Int     @default(1)
+  ip       String  @db.VarChar(255)
+  userId   Int?
+  planetId Int?
+  planet   planet? @relation(fields: [planetId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_e0d74f6c0015fbd543e80696380")
+  user     user?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_d23280b8742bba5d43dffcd195b")
+
+  @@index([userId], map: "FK_d23280b8742bba5d43dffcd195b")
+  @@index([planetId], map: "FK_e0d74f6c0015fbd543e80696380")
+}
+
+model role {
+  id          Int    @id @default(autoincrement())
+  name        String @db.VarChar(255)
+  displayName String @db.VarChar(255)
+  user        user[]
+}
+
+model user {
+  id           Int            @id @default(autoincrement())
+  username     String         @db.VarChar(255)
+  password     String         @db.VarChar(255)
+  email        String         @db.VarChar(255)
+  roleId       Int?
+  role         role?          @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92194")
+  planet_views planet_views[]
+
+  @@index([roleId], map: "FK_c28e52f758e7bbc53828db92194")
+}
