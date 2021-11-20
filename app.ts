@@ -21,14 +21,13 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 })
 
 fs.readdirSync('./src/routers').forEach((file) => {
-    const filename = file.split('.')[0]
-    const routerIndex = filename.indexOf('_router')
-    let routeName = filename.slice(0, routerIndex)
-    while (routeName.includes('_')) {
-        routeName.replace('_', '-')
+    if (!file.startsWith('_')) {
+        const filename = file.split('.')[0]
+        const routerIndex = filename.indexOf('_router')
+        const routeName = filename.slice(0, routerIndex).replace('_', '-')
+        Logger.info(`Mount route '/${routeName}' with router '${filename}'`)
+        app.use(`/${routeName}`, require(`./src/routers/${filename}`))
     }
-    Logger.info(`Mount route '${routeName}' with router '${filename}'`)
-    app.use(`/${routeName}`, require(`./src/routers/${filename}`))
 })
 
 app.get('*', (req: Request, res: Response) => {
