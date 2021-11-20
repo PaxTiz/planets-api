@@ -3,18 +3,25 @@ import { validate } from "./middleware"
 
 export default {
 	login: [
-		body('username').isString(),
-		body('password').isString(),
+		body('username').isString().withMessage('Username is required'),
+		body('password').isString().withMessage('Password is required'),
 		validate
 	],
 
 	create: [
-		body('username').isString().isLength({ min: 4, max: 20 }),
-		body('email').isEmail(),
+		body('username')
+			.isString()
+			.withMessage('Username is required')
+			.isLength({ min: 4, max: 20 })
+			.withMessage('Username length may be between 4 and 20 characters'),
+		body('email')
+			.isEmail()
+			.withMessage('Email is not a valid email address'),
 		body('password')
 			.isString()
+			.withMessage('Password is required')
 			.isLength({ min: 8 })
-			.withMessage('Le mot de passe doit faire au moins 8 caractères'),
+			.withMessage('Password is too small'),
 		validate
 	]
 }

@@ -7,18 +7,16 @@ import FormError from '../utils/form_error'
 export default class AuthController extends Controller {
 
 	login = async (req: Request, res: Response): Promise<Response> => {
-		const invalid = { message: "Invalid username or email" }
-
 		/** A user exists wth given username ? */
 		const user = await userService.findOneBy('username', req.body.username)
 		if (!user) {
-			return this.handleResult(res, invalid, 400)
+			return this.handleResult(res, { message: "Invalid username" }, 400)
 		}
 
 		/** If a user exists, is the password correct ? */
 		const isValidPassword = await Utils.validateBcrypt(req.body.password, user.password)
 		if (!isValidPassword) {
-			return this.handleResult(res, invalid, 400)
+			return this.handleResult(res, { message: "Invalid password" }, 400)
 		}
 
 		return this.handleResult(res, {

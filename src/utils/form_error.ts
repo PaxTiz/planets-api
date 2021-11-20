@@ -13,15 +13,11 @@ export default class FormError {
   /**
    * Message to display to the user
    */
-  msg: string
+  message: string
   
-  constructor(
-    param: string,
-    msg: string,
-  )
-  {
+  constructor(param: string, message: string) {
     this.param = param
-    this.msg = msg
+    this.message = message
   }
   
 }

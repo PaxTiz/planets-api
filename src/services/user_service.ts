@@ -45,8 +45,10 @@ const create = async (user: UserCreateDTO): Promise<user> => {
 		data: {
 			username: user.username,
 			email: user.email,
-			password: user.password
-		}
+			password: user.password,
+			roleId: 1
+		},
+		include: { role: true }
 	})
 }
 
