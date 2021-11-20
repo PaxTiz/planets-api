@@ -1,17 +1,42 @@
-// import { Equal, getRepository } from "typeorm";
-// import Planet from "../entities/Planet";
-// import PlanetViews from "../entities/PlanetViews";
-// import User from "../entities/User";
+import { planet_views as PlanetView } from "@prisma/client"
+import prisma from "../client"
 
-// export default class PlanetViewsRepository {
+const findByPlanetAndUserOrIp = async (planet: number, user: number, ip: string): Promise<PlanetView | null> => {
+    return await prisma.planet_views.findFirst({
+        where: {
+            ip,
+            planetId: planet,
+            userId: user
+        },
+        include: { planet: true, user: true }
+    })
+}
 
-//     static async findByPlanetAndUserOrIp(planet: Planet, user: User|null, ip: string|null): Promise<PlanetViews | undefined> {
-//         return await getRepository(PlanetViews).findOne({
-//             where: [
-//                 { planet, user },
-//                 { planet, ip },
-//             ]
-//         })
-//     }
+const upsert = async (planet: number, user: number, ip: string): Promise<PlanetView> => {
+    const pv = await findByPlanetAndUserOrIp(planet, user, ip)
+    if (pv) {
+        return await prisma.planet_views.update({
+            data: {
+                count: { increment: 1 }
+            },
+            where: {
+                id: pv!.id
+            },
+            include: { planet: true, user: true }
+        })
+    }
 
-// }
+    return await prisma.planet_views.create({
+        data: {
+            ip,
+            planetId: planet,
+            userId: user
+        },
+        include: { planet: true, user: true }
+    })
+}
+
+export default {
+    findByPlanetAndUserOrIp,
+    upsert
+}

@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import Controller from "./controller";
-import planetService from "../services/planet_service";
+import { Request, Response } from "express"
+import Controller from "./controller"
+import planetService from "../services/planet_service"
 
 export default class PlanetController extends Controller {
 

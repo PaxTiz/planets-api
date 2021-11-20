@@ -28,7 +28,7 @@ const exists = async (column: string, value: any): Promise<boolean> => {
  * @returns the model is it's found, or null
  */
 const findOneBy = async (column: string, value: any): Promise<user | null> => {
-	return await prisma.user.findUnique({
+	return await prisma.user.findFirst({
 		where: { [column]: value },
 		include: { role: true },
 	})
