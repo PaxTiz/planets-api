@@ -27,8 +27,8 @@ model planet {
   name                           String         @db.VarChar(100)
   description                    String         @db.Text
   image                          String?        @db.VarChar(255)
-  sun_distance_ly                Float          @db.Float
-  sun_distance_km                Int
+  distance                       Float          @db.Float @default(0)
+  distance_unit                  String         @db.VarChar(3) @default("km")
   composition                    String?        @db.LongText
   galaxyId                       Int?
   galaxy                         galaxy?        @relation(fields: [galaxyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7f8df2c355a7427e7df464808d3")
