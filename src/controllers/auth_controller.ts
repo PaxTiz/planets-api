@@ -1,8 +1,9 @@
-import { Request, Response } from "express"
-import Controller from "./controller"
-import userService from "../services/user_service"
-import Utils from "../utils/crypt"
+import { Request, Response } from 'express'
+import Controller from './controller'
+import userService from '../services/user_service'
+import Utils from '../utils/crypt'
 import FormError from '../utils/form_error'
+import ErrorKeys from '../utils/error_keys'
 
 export default class AuthController extends Controller {
 
@@ -10,13 +11,13 @@ export default class AuthController extends Controller {
 		/** A user exists wth given username ? */
 		const user = await userService.findOneBy('username', req.body.username)
 		if (!user) {
-			return this.handleResult(res, { message: "Invalid username" }, 400)
+			return this.handleResult(res, { message: ErrorKeys.username_not_found }, 400)
 		}
 
 		/** If a user exists, is the password correct ? */
 		const isValidPassword = await Utils.validateBcrypt(req.body.password, user.password)
 		if (!isValidPassword) {
-			return this.handleResult(res, { message: "Invalid password" }, 400)
+			return this.handleResult(res, { message: ErrorKeys.password_not_match }, 400)
 		}
 
 		return this.handleResult(res, {
@@ -30,19 +31,13 @@ export default class AuthController extends Controller {
 		/** Is the username already taken ? */
 		const username = await userService.exists('username', req.body.username)
 		if (username) {
-			errors.push(new FormError(
-				'username',
-				"Username is already in use"
-			))
+			errors.push(new FormError('username', ErrorKeys.username_alredy_in_use))
 		}
 
 		/** Is the email already taken ? */
 		const email = await userService.exists('email', req.body.email)
 		if (email) {
-			errors.push(new FormError(
-				'email',
-				"Email is already in use"
-			))
+			errors.push(new FormError('email', ErrorKeys.email_alredy_in_use))
 		}
 
 		if (errors.length > 0) {
@@ -63,7 +58,7 @@ export default class AuthController extends Controller {
 			}, 201)
 		}).catch(() => {
 			return this.handleResult(res, {
-				message: "Can't create user"
+				message: ErrorKeys.user_save_error
 			}, 500)
 		})
 	}

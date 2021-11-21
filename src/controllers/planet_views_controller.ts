@@ -1,6 +1,7 @@
-import { Request, Response } from "express"
-import pvService from "../services/planet_views_service"
-import Controller from "./controller"
+import { Request, Response } from 'express'
+import pvService from '../services/planet_views_service'
+import ErrorKeys from '../utils/error_keys'
+import Controller from './controller'
 
 export default class PlanetViewsController extends Controller {
 
@@ -10,7 +11,7 @@ export default class PlanetViewsController extends Controller {
             return this.handleResult(res, { pv }, 200)
         }
 
-        return this.handleResult(res, { message: 'Cannot save view' }, 500)
+        return this.handleResult(res, { message: ErrorKeys.planet_views_save_error }, 500)
     }
 
 }

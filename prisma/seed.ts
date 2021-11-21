@@ -38,7 +38,7 @@ const seed = () => {
     
         await client.role.create({
             data: {
-                name: 'user',
+                name: 'default',
                 displayName: 'Member'
             }
         })

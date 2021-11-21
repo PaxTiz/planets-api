@@ -1,8 +1,9 @@
-import { validationResult } from "express-validator"
-import { NextFunction, Request, Response } from "express"
-import Utils from "../utils/crypt"
-import { user as User } from "@prisma/client"
-import userService from "../services/user_service"
+import { validationResult } from 'express-validator'
+import { NextFunction, Request, Response } from 'express'
+import Utils from '../utils/crypt'
+import { user as User } from '@prisma/client'
+import userService from '../services/user_service'
+import ErrorKeys from '../utils/error_keys'
 
 declare global {
     namespace Express {
@@ -32,7 +33,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
  * or JWT token is not valid
  */
 export async function isAuth(req: Request, res: Response, next: NextFunction) {
-    const error = { message: 'Unauthorized' }
+    const error = { message: ErrorKeys.unauthorized }
     const header = req.get('authorization')
     if (!header) {
         return res.status(401).json(error)

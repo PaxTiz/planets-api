@@ -1,4 +1,5 @@
-import { Response } from "express";
+import { Response } from 'express'
+import ErrorKeys from '../utils/error_keys'
 
 export default abstract class Controller {
 
@@ -13,8 +14,8 @@ export default abstract class Controller {
 			}
 			return res.status(422).json(errors)
 		}
-		else if (data === undefined && !custom) {
-			return res.status(404).json({ message: 'Entity not found' })
+		else if (!data && !custom) {
+			return res.status(404).json({ message: ErrorKeys.not_found })
 		} else {
 			return res.status(status).json(data)
 		}

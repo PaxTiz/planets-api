@@ -1,5 +1,5 @@
-import { user } from "@prisma/client"
-import prisma from "../client"
+import { user } from '@prisma/client'
+import prisma from '../client'
 
 export interface UserCreateDTO {
 	username: string
@@ -46,7 +46,7 @@ const create = async (user: UserCreateDTO): Promise<user> => {
 			username: user.username,
 			email: user.email,
 			password: user.password,
-			roleId: 1
+			roleId: (await prisma.role.findFirst({ where: { name: 'default' } }))?.id
 		},
 		include: { role: true }
 	})

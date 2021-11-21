@@ -19,23 +19,23 @@ describe('Authentication endpoints', () => {
 
                     expect(err.errors[0].msg).to.be.a('string')
                     expect(err.errors[0].param).to.be.equal('username')
-                    expect(err.errors[0].msg).to.be.equal('Username is required')
+                    expect(err.errors[0].msg).to.be.equal('username_required')
 
                     expect(err.errors[1].msg).to.be.a('string')
                     expect(err.errors[1].param).to.be.equal('username')
-                    expect(err.errors[1].msg).to.be.equal('Username length may be between 4 and 20 characters')
+                    expect(err.errors[1].msg).to.be.equal('username_bad_length')
 
                     expect(err.errors[2].msg).to.be.a('string')
                     expect(err.errors[2].param).to.be.equal('email')
-                    expect(err.errors[2].msg).to.be.equal('Email is not a valid email address')
+                    expect(err.errors[2].msg).to.be.equal('email_invalid')
 
                     expect(err.errors[3].msg).to.be.a('string')
                     expect(err.errors[3].param).to.be.equal('password')
-                    expect(err.errors[3].msg).to.be.equal('Password is required')
+                    expect(err.errors[3].msg).to.be.equal('password_required')
 
                     expect(err.errors[4].msg).to.be.a('string')
                     expect(err.errors[4].param).to.be.equal('password')
-                    expect(err.errors[4].msg).to.be.equal('Password is too small')
+                    expect(err.errors[4].msg).to.be.equal('password_too_small')
                 })
         })
 
@@ -53,11 +53,11 @@ describe('Authentication endpoints', () => {
 
                 expect(err.errors[0].msg).to.be.a('string')
                 expect(err.errors[0].param).to.be.equal('username')
-                expect(err.errors[0].msg).to.be.equal('Username is required')
+                expect(err.errors[0].msg).to.be.equal('username_required')
 
                 expect(err.errors[1].msg).to.be.a('string')
                 expect(err.errors[1].param).to.be.equal('username')
-                expect(err.errors[1].msg).to.be.equal('Username length may be between 4 and 20 characters')
+                expect(err.errors[1].msg).to.be.equal('username_bad_length')
             })
         })
 
@@ -75,7 +75,7 @@ describe('Authentication endpoints', () => {
 
                 expect(err.errors[0].msg).to.be.a('string')
                 expect(err.errors[0].param).to.be.equal('email')
-                expect(err.errors[0].msg).to.be.equal('Email is not a valid email address')
+                expect(err.errors[0].msg).to.be.equal('email_invalid')
             })
         })
 
@@ -93,11 +93,11 @@ describe('Authentication endpoints', () => {
 
                 expect(err.errors[0].msg).to.be.a('string')
                 expect(err.errors[0].param).to.be.equal('username')
-                expect(err.errors[0].msg).to.be.equal('Username is required')
+                expect(err.errors[0].msg).to.be.equal('username_required')
 
                 expect(err.errors[1].msg).to.be.a('string')
                 expect(err.errors[1].param).to.be.equal('username')
-                expect(err.errors[1].msg).to.be.equal('Username length may be between 4 and 20 characters')
+                expect(err.errors[1].msg).to.be.equal('username_bad_length')
             })
         })
 
@@ -116,7 +116,7 @@ describe('Authentication endpoints', () => {
 
                 expect(err.errors[0].msg).to.be.a('string')
                 expect(err.errors[0].param).to.be.equal('password')
-                expect(err.errors[0].msg).to.be.equal('Password is too small')
+                expect(err.errors[0].msg).to.be.equal('password_too_small')
             })
         })
 
@@ -135,7 +135,7 @@ describe('Authentication endpoints', () => {
 
                 expect(err.errors[0].msg).to.be.a('string')
                 expect(err.errors[0].param).to.be.equal('email')
-                expect(err.errors[0].msg).to.be.equal('Email is not a valid email address')
+                expect(err.errors[0].msg).to.be.equal('email_invalid')
             })
         })
 
@@ -165,9 +165,9 @@ describe('Authentication endpoints', () => {
                 expect(err.errors).to.be.a('array')
                 expect(err.errors).length(2)
                 expect(err.errors[0].param).to.be.equal('username')
-                expect(err.errors[0].msg).to.be.equal('Username is already in use')
+                expect(err.errors[0].msg).to.be.equal('username_already_in_use')
                 expect(err.errors[1].param).to.be.equal('email')
-                expect(err.errors[1].msg).to.be.equal('Email is already in use')
+                expect(err.errors[1].msg).to.be.equal('email_already_in_use')
             })
         })
     })
@@ -180,9 +180,9 @@ describe('Authentication endpoints', () => {
                 expect(err).to.be.a('object')
                 expect(err.errors).to.be.a('array')
                 expect(err.errors[0].param).to.be.equal('username')
-                expect(err.errors[0].msg).to.be.equal('Username is required')
+                expect(err.errors[0].msg).to.be.equal('username_required')
                 expect(err.errors[1].param).to.be.equal('password')
-                expect(err.errors[1].msg).to.be.equal('Password is required')
+                expect(err.errors[1].msg).to.be.equal('password_required')
             })
         })
 
@@ -193,7 +193,7 @@ describe('Authentication endpoints', () => {
                 expect(err).to.be.a('object')
                 expect(err.errors).to.be.a('array')
                 expect(err.errors[0].param).to.be.equal('username')
-                expect(err.errors[0].msg).to.be.equal('Username is required')
+                expect(err.errors[0].msg).to.be.equal('username_required')
             })
         })
 
@@ -205,7 +205,7 @@ describe('Authentication endpoints', () => {
                 expect(err).to.be.a('object')
                 expect(err.errors).to.be.a('array')
                 expect(err.errors[0].param).to.be.equal('password')
-                expect(err.errors[0].msg).to.be.equal('Password is required')
+                expect(err.errors[0].msg).to.be.equal('password_required')
             })
         })
 
@@ -216,7 +216,7 @@ describe('Authentication endpoints', () => {
                 expect(err).to.be.a('object')
                 expect(err).to.has.property('message')
                 expect(err.message).to.be.a('string')
-                expect(err.message).to.be.equal('Invalid password')
+                expect(err.message).to.be.equal('password_not_match')
             })
         })
 
