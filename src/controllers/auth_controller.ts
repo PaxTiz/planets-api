@@ -60,7 +60,7 @@ export default class AuthController extends Controller {
 			return this.handleResult(res, {
 				user: { ...inserted, password: null },
 				token: Utils.generateJwtToken({ id: inserted.id })
-			})
+			}, 201)
 		}).catch(() => {
 			return this.handleResult(res, {
 				message: "Can't create user"
