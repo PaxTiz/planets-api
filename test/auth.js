@@ -145,9 +145,9 @@ describe('Authentication endpoints', () => {
                 email,
                 password
             }).then(res => {
-                    expect(res.data.token).to.be.a('string')
-                    expect(res.data.user).to.be.a('object')
-                    expect(res.status).to.be.equal(201)
+                expect(res.data.data.token).to.be.a('string')
+                expect(res.data.data.user).to.be.a('object')
+                expect(res.status).to.be.equal(201)
             }).catch(err => {
                 expect(err).to.be.equal(undefined)
             })
@@ -222,8 +222,8 @@ describe('Authentication endpoints', () => {
 
         it('should login with success', async () => {
             return request('post', '/auth/login', { username, password }).then(res => {
-                expect(res.data.token).to.be.a('string')
-                expect(res.data.user).to.be.a('object')
+                expect(res.data.data.token).to.be.a('string')
+                expect(res.data.data.user).to.be.a('object')
                 expect(res.status).to.be.equal(200)
             }).catch(err => {
                 expect(err).to.be.equal('array')

@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import compression from 'compression'
 import dotenv from 'dotenv'
 import Logger from './src/utils/logger'
+import ErrorKeys from './src/utils/error_keys'
 dotenv.config()
 
 const app = express()
@@ -17,7 +18,7 @@ app.use(morgan('common'))
 app.use(cors())
 app.use(compression())
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    res.status(500).json({ message: "Internal Server Error" })
+    res.status(500).json({ message: ErrorKeys.server_error })
 })
 
 fs.readdirSync('./src/routers').forEach((file) => {

@@ -1,17 +1,14 @@
 import { Request, Response } from 'express'
 import pvService from '../services/planet_views_service'
 import ErrorKeys from '../utils/error_keys'
-import Controller from './controller'
+import { Ok, InternalServerError } from './controller'
 
-export default class PlanetViewsController extends Controller {
+export default class PlanetViewsController {
 
     updateOrCreate = async (req: Request, res: Response) => {
-        const pv = await pvService.upsert(parseInt(req.params.planet), req.user.id, req.ip)
-        if (pv) {
-            return this.handleResult(res, { pv }, 200)
-        }
-
-        return this.handleResult(res, { message: ErrorKeys.planet_views_save_error }, 500)
+        return pvService.upsert(parseInt(req.params.planet), req.user.id, req.ip)
+            .then(pv => Ok(res, pv))
+            .catch(() => InternalServerError(res, ErrorKeys.planet_views_save_error))
     }
 
 }

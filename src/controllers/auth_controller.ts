@@ -1,26 +1,26 @@
 import { Request, Response } from 'express'
-import Controller from './controller'
+import { Ok, Unauthorized, UnprocessableEntity, InternalServerError } from './controller'
 import userService from '../services/user_service'
 import Utils from '../utils/crypt'
 import FormError from '../utils/form_error'
 import ErrorKeys from '../utils/error_keys'
 
-export default class AuthController extends Controller {
+export default class AuthController {
 
 	login = async (req: Request, res: Response): Promise<Response> => {
 		/** A user exists wth given username ? */
 		const user = await userService.findOneBy('username', req.body.username)
 		if (!user) {
-			return this.handleResult(res, { message: ErrorKeys.username_not_found }, 400)
+			return Unauthorized(res, ErrorKeys.username_not_found)
 		}
 
 		/** If a user exists, is the password correct ? */
 		const isValidPassword = await Utils.validateBcrypt(req.body.password, user.password)
 		if (!isValidPassword) {
-			return this.handleResult(res, { message: ErrorKeys.password_not_match }, 400)
+			return Unauthorized(res, ErrorKeys.password_not_match)
 		}
 
-		return this.handleResult(res, {
+		return Ok(res, {
 			user: { ...user, password: null },
 			token: Utils.generateJwtToken({ id: user.id })
 		})
@@ -41,7 +41,7 @@ export default class AuthController extends Controller {
 		}
 
 		if (errors.length > 0) {
-			return this.handleResult(res, { 'errors': errors }, 422, true)
+			return UnprocessableEntity(res, errors)
 		}
 
 		const user = {
@@ -52,14 +52,12 @@ export default class AuthController extends Controller {
 
 		/** Insert user and returns data with JWT token */
 		return userService.create(user).then(inserted => {
-			return this.handleResult(res, {
+			return Ok(res, {
 				user: { ...inserted, password: null },
 				token: Utils.generateJwtToken({ id: inserted.id })
-			}, 201)
+			}, null, 201)
 		}).catch(() => {
-			return this.handleResult(res, {
-				message: ErrorKeys.user_save_error
-			}, 500)
+			return InternalServerError(res, ErrorKeys.user_save_error)
 		})
 	}
 

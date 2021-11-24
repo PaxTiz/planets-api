@@ -6,10 +6,12 @@ export default {
 	login: [
 		body('username')
 			.isString()
-			.withMessage(ErrorKeys.username_required),
+			.withMessage(ErrorKeys.username_required)
+			.trim(),
 		body('password')
 			.isString()
-			.withMessage(ErrorKeys.password_required),
+			.withMessage(ErrorKeys.password_required)
+			.trim(),
 		validate
 	],
 
@@ -18,15 +20,18 @@ export default {
 			.isString()
 			.withMessage(ErrorKeys.username_required)
 			.isLength({ min: 4, max: 20 })
-			.withMessage(ErrorKeys.username_bad_length),
+			.withMessage(ErrorKeys.username_bad_length)
+			.trim(),
 		body('email')
 			.isEmail()
-			.withMessage(ErrorKeys.email_invalid),
+			.withMessage(ErrorKeys.email_invalid)
+			.trim(),
 		body('password')
 			.isString()
 			.withMessage(ErrorKeys.password_required)
 			.isLength({ min: 8 })
-			.withMessage(ErrorKeys.password_too_small),
+			.withMessage(ErrorKeys.password_too_small)
+			.trim(),
 		validate
 	]
 }
