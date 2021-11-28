@@ -10,16 +10,12 @@ datasource db {
 model constellation {
   id     Int      @id @default(autoincrement())
   name   String   @db.VarChar(100)
-  galaxy galaxy[]
 }
 
 model galaxy {
   id                             Int            @id @default(autoincrement())
   name                           String         @db.VarChar(100)
-  constellationId                Int?
-  constellation                  constellation? @relation(fields: [constellationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_be350151d5d7713d748192b067a")
   planets                        planet[]
-  @@index([constellationId], map: "FK_be350151d5d7713d748192b067a")
 }
 
 model planet {
