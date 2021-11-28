@@ -6,7 +6,7 @@ import ErrorKeys from "../utils/error_keys"
 export default class PlanetController {
 
     index = async (req: Request, res: Response) => {
-        return planetService.findAll()
+        return planetService.findAll(req.query.galaxy === 'true')
             .then(planets => Ok(res, planets))
             .catch(() => InternalServerError(res, ErrorKeys.planets_find_all_error))
     }

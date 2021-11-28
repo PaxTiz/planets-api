@@ -27,6 +27,7 @@ enum ErrorKeys {
     planet_views_save_error = 'planet_views_save_error',
 
     /** === PLANETS ERRORS KEYS === */
+    planets_middleware_galaxy_boolean = 'planets_middleware_galaxy_boolean',
     planets_find_all_error = 'planets_find_all_error',
     planet_id_missing = 'planet_id_missing',
 }

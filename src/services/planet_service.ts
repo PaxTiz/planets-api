@@ -4,9 +4,9 @@ import prisma from "../client"
 /**
  * Fetch planets and returns data with their galaxy
  */
-const findAll = async (): Promise<Array<planet>> => {
+const findAll = async (includeGalaxy: boolean): Promise<Array<planet>> => {
     return await prisma.planet.findMany({
-        include: { galaxy: true }
+        include: { galaxy: includeGalaxy }
     })
 }
 
