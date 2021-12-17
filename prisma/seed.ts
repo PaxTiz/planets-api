@@ -14,10 +14,12 @@ const truncate = async () => {
     await client.galaxy.deleteMany()
     Logger.info('Delete constellations')
     await client.constellation.deleteMany()
+    Logger.info('Delete quizz categories')
+    await client.quizz_categories.deleteMany()
 }
 
-const seed = () => {
-    truncate().then(async () => {
+const seed = async () => {
+    return await truncate().then(async () => {
         Logger.info('Create constellations')
         await client.constellation.create({
             data: {
@@ -48,7 +50,7 @@ const seed = () => {
                         composition: null,
                         distance: 58000000,
                         distance_unit: 'km',
-                        image: 'mercure.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Mercury_in_color_-_Prockter07_centered.jpg',
                         galaxyId: milkyWay.id,
                     },
                     {
@@ -57,7 +59,7 @@ const seed = () => {
                         composition: null,
                         distance: 108000000,
                         distance_unit: 'km',
-                        image: 'venus.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg',
                         galaxyId: milkyWay.id,
                     },
                     {
@@ -66,7 +68,7 @@ const seed = () => {
                         composition: null,
                         distance: 152000000,
                         distance_unit: 'km',
-                        image: 'earth.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg',
                         galaxyId: milkyWay.id,
                     },
                     {
@@ -75,7 +77,7 @@ const seed = () => {
                         composition: null,
                         distance: 227939200,
                         distance_unit: 'km',
-                        image: 'mars.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg',
                         galaxyId: milkyWay.id,
                     },
                     {
@@ -84,7 +86,7 @@ const seed = () => {
                         composition: null,
                         distance: 778600000,
                         distance_unit: 'km',
-                        image: 'jupiter.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg',
                         galaxyId: milkyWay.id,
                     },
                     {
@@ -93,7 +95,7 @@ const seed = () => {
                         composition: null,
                         distance: 1430000000,
                         distance_unit: 'km',
-                        image: 'jupiter.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg',
                         galaxyId: milkyWay.id,
                     },
                     {
@@ -102,7 +104,7 @@ const seed = () => {
                         composition: null,
                         distance: 2800000000,
                         distance_unit: 'km',
-                        image: 'jupiter.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Uranus_true_colour.jpg',
                         galaxyId: milkyWay.id,
                     },
                     {
@@ -111,7 +113,7 @@ const seed = () => {
                         composition: null,
                         distance: 4500000000,
                         distance_unit: 'km',
-                        image: 'jupiter.png',
+                        image: 'https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg',
                         galaxyId: milkyWay.id,
                     },
                 ]
@@ -125,16 +127,24 @@ const seed = () => {
                 displayName: 'Member'
             }
         })
+
+        Logger.info('Create quizz categories')
+        await client.quizz_categories.createMany({
+            data: [
+                { name: 'Planet' },
+                { name: 'Galaxy' },
+                { name: 'Constellation' },
+                { name: 'Universe' },
+                { name: 'Space Exploration' },
+                { name: 'Important People' },
+            ]
+        })
     })
 }
 
 const main = async () => {
     Logger.info('Start seeding')
-    try {
-        seed()
-    } catch (e) {
-        return Promise.reject(e)
-    }
+    return seed().catch((e: Error) => e)
 }
 
 main().then(() => {
