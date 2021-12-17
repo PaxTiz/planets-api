@@ -22,25 +22,25 @@ model planet {
   id            Int            @id @default(autoincrement())
   name          String         @db.VarChar(100)
   description   String         @db.Text
-  image         String?        @db.VarChar(255)
+  image         String         @db.VarChar(255)
   composition   String?        @db.LongText
-  galaxyId      Int?
+  galaxyId      Int
   distance      Float          @default(0) @db.Float
   distance_unit String         @default("km") @db.VarChar(3)
-  galaxy        galaxy?        @relation(fields: [galaxyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7f8df2c355a7427e7df464808d3")
+  galaxy        galaxy         @relation(fields: [galaxyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7f8df2c355a7427e7df464808d3")
   planet_views  planet_views[]
 
   @@index([galaxyId], map: "FK_7f8df2c355a7427e7df464808d3")
 }
 
 model planet_views {
-  id       Int     @id @default(autoincrement())
-  count    Int     @default(1)
-  ip       String  @db.VarChar(255)
+  id       Int    @id @default(autoincrement())
+  count    Int    @default(1)
+  ip       String @db.VarChar(255)
   userId   Int?
-  planetId Int?
-  planet   planet? @relation(fields: [planetId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_e0d74f6c0015fbd543e80696380")
-  user     user?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_d23280b8742bba5d43dffcd195b")
+  planetId Int
+  planet   planet @relation(fields: [planetId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_e0d74f6c0015fbd543e80696380")
+  user     user?  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_d23280b8742bba5d43dffcd195b")
 
   @@index([userId], map: "FK_d23280b8742bba5d43dffcd195b")
   @@index([planetId], map: "FK_e0d74f6c0015fbd543e80696380")
@@ -58,23 +58,26 @@ model user {
   username     String         @db.VarChar(255)
   password     String         @db.VarChar(255)
   email        String         @db.VarChar(255)
-  roleId       Int?
-  role         role?          @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92194")
+  roleId       Int
+  role         role           @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92194")
   planet_views planet_views[]
 
   @@index([roleId], map: "FK_c28e52f758e7bbc53828db92194")
 }
 
-model quizz {
-  id          Int    @id @default(autoincrement())
-  name        String @db.VarChar(255)
-  description String @db.Text
-  categoryId  Int?
+model quizz_categories {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(255)
+  quizz quizz[]
 }
 
-model quizz_categories {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+model quizz {
+  id          Int               @id @default(autoincrement())
+  name        String            @db.VarChar(255)
+  description String            @db.Text
+  categoryId  Int
+  category    quizz_categories? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92195")
+  questions   quizz_questions[]
 }
 
 model quizz_questions {
@@ -82,7 +85,8 @@ model quizz_questions {
   type     quizz_questions_type @default(text)
   question String               @db.VarChar(255)
   anwsers  Json
-  quizzId  Int?
+  quizzId  Int
+  quizz    quizz?               @relation(fields: [quizzId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92196")
 }
 
 enum quizz_questions_type {

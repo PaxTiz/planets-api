@@ -46,7 +46,7 @@ const create = async (user: UserCreateDTO): Promise<user> => {
 			username: user.username,
 			email: user.email,
 			password: user.password,
-			roleId: (await prisma.role.findFirst({ where: { name: 'default' } }))?.id
+			roleId: (await prisma.role.findFirst({ where: { name: 'default' } }))!.id
 		},
 		include: { role: true }
 	})

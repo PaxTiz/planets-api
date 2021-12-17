@@ -1,4 +1,4 @@
-import { validationResult } from 'express-validator'
+import { query, validationResult } from 'express-validator'
 import { NextFunction, Request, Response } from 'express'
 import Utils from '../utils/crypt'
 import { user as User } from '@prisma/client'
@@ -53,3 +53,16 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
     req.auth = true
     return next()
 }
+
+export const applyCommonFilters = [
+    query('limit')
+        .optional()
+        .isInt()
+        .withMessage(ErrorKeys.limit_is_not_a_valid_number)
+        .toInt(),
+    query('offset')
+        .optional()
+        .isInt()
+        .withMessage(ErrorKeys.offset_is_not_a_valid_number)
+        .toInt(),
+]
