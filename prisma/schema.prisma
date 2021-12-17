@@ -8,27 +8,27 @@ datasource db {
 }
 
 model constellation {
-  id     Int      @id @default(autoincrement())
-  name   String   @db.VarChar(100)
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(100)
 }
 
 model galaxy {
-  id                             Int            @id @default(autoincrement())
-  name                           String         @db.VarChar(100)
-  planets                        planet[]
+  id      Int      @id @default(autoincrement())
+  name    String   @db.VarChar(100)
+  planets planet[]
 }
 
 model planet {
-  id                             Int            @id @default(autoincrement())
-  name                           String         @db.VarChar(100)
-  description                    String         @db.Text
-  image                          String?        @db.VarChar(255)
-  distance                       Float          @db.Float @default(0)
-  distance_unit                  String         @db.VarChar(3) @default("km")
-  composition                    String?        @db.LongText
-  galaxyId                       Int?
-  galaxy                         galaxy?        @relation(fields: [galaxyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7f8df2c355a7427e7df464808d3")
-  planet_views                   planet_views[]
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar(100)
+  description   String         @db.Text
+  image         String?        @db.VarChar(255)
+  composition   String?        @db.LongText
+  galaxyId      Int?
+  distance      Float          @default(0) @db.Float
+  distance_unit String         @default("km") @db.VarChar(3)
+  galaxy        galaxy?        @relation(fields: [galaxyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7f8df2c355a7427e7df464808d3")
+  planet_views  planet_views[]
 
   @@index([galaxyId], map: "FK_7f8df2c355a7427e7df464808d3")
 }
@@ -63,4 +63,30 @@ model user {
   planet_views planet_views[]
 
   @@index([roleId], map: "FK_c28e52f758e7bbc53828db92194")
+}
+
+model quizz {
+  id          Int    @id @default(autoincrement())
+  name        String @db.VarChar(255)
+  description String @db.Text
+  categoryId  Int?
+}
+
+model quizz_categories {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+}
+
+model quizz_questions {
+  id       Int                  @id @default(autoincrement())
+  type     quizz_questions_type @default(text)
+  question String               @db.VarChar(255)
+  anwsers  Json
+  quizzId  Int?
+}
+
+enum quizz_questions_type {
+  text
+  text_multiple
+  image_multiple
 }
