@@ -2,39 +2,37 @@ import { Response } from 'express'
 import ErrorKey from '../utils/error_keys'
 import FormError from '../utils/form_error'
 
-export function handleResult(res: Response, data: any, status: number = 200, custom: boolean = false): Response {
-	if (status === 422 && !custom) {
-		// Use to returns errors as same way as express-validator
-		const errors = {
-			errors: (data as Array<any>).map(e => ({
-				param: e.property,
-				msg: Object.values(e.constraints)[0]
-			}))
-		}
-		return res.status(422).json(errors)
-	}
-	else if (!data && !custom) {
-		return res.status(404).json({ message: ErrorKey.not_found })
-	} else {
-		return res.status(status).json(data)
+type HttpResponse = {
+	message: ErrorKey | null,
+	data: Object | Array<any> | string
+}
+
+/**
+ * Format a json response that will be send
+ * to the client
+ * 
+ * @param data data to return in the response body
+ * @param message message to send with the body
+ * @returns response with specified status code and formatted body
+ */
+export function FormatResponse(data: any, message: ErrorKey | null = null): HttpResponse {
+	return {
+		message,
+		data
 	}
 }
 
 /**
- * Handle a 200 status.
- * Use it when status code is a success (200, 201 or 204)
+ * Handle any response with custom status code.
+ * Use it only when status code is 200 <= `code` < 400
  * 
  * @param res express response getting from the router
- * @param data data to return in the response body
- * @param message message to send with the body
- * @param status status code of the response
+ * @param data formatted data with `FormatResponse` function
+ * @param status the status code associated to the response, 200 by default
  * @returns response with specified status code and formatted body
  */
-export function Ok(res: Response, data: any, message: string | null = null, status: number = 200): Response {
-	return res.status(status).json({
-		message,
-		data
-	})
+export function Ok(res: Response, data: HttpResponse, status: number = 200) {
+	return res.status(status).json(data)
 }
 
 /**
@@ -43,10 +41,10 @@ export function Ok(res: Response, data: any, message: string | null = null, stat
  * 
  * @param res express response getting from the router
  * @param message a key representing what is invalid
- * @returns response with specified status code and formatted body
+ * @returns response with 400 status code and formatted error
  */
 export function BadRequest(res: Response, message: ErrorKey) {
-	return res.status(400).json({ message })
+	return res.status(400).json(FormatResponse(null, message))
 }
 
 /**
@@ -55,10 +53,10 @@ export function BadRequest(res: Response, message: ErrorKey) {
  * 
  * @param res express response getting from the router
  * @param message a key representing what is invalid
- * @returns response with specified status code and formatted body
+ * @returns response with 401 status code and formatted error
  */
  export function Unauthorized(res: Response, message: ErrorKey | null = null) {
-	return res.status(401).json({ message })
+	return res.status(401).json(FormatResponse(null, message))
 }
 
 /**
@@ -67,10 +65,10 @@ export function BadRequest(res: Response, message: ErrorKey) {
  * 
  * @param res express response getting from the router
  * @param message a key representing what is invalid
- * @returns response with specified status code and formatted body
+ * @returns response with 422 status code and formatted errors
  */
  export function UnprocessableEntity(res: Response, errors: Array<FormError>) {
-	return res.status(422).json({ errors })
+	return res.status(422).json(FormatResponse(errors, null))
 }
 
 /**
@@ -79,8 +77,8 @@ export function BadRequest(res: Response, message: ErrorKey) {
  * 
  * @param res express response getting from the router
  * @param error a key representing an error that should never happend in normal conditions
- * @returns response with specified status code and formatted body
+ * @returns response with 500 status code and formatted error
  */
  export function InternalServerError(res: Response, error: ErrorKey): Response {
-	return res.status(500).json({ error })
+	return res.status(500).json(FormatResponse(null, error))
 }

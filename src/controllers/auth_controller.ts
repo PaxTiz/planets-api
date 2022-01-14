@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Ok, Unauthorized, UnprocessableEntity, InternalServerError } from './controller'
+import { FormatResponse, Unauthorized, UnprocessableEntity, InternalServerError } from './controller'
 import userService from '../services/user_service'
 import Utils from '../utils/crypt'
 import FormError from '../utils/form_error'
@@ -20,10 +20,10 @@ export default class AuthController {
 			return Unauthorized(res, ErrorKeys.password_not_match)
 		}
 
-		return Ok(res, {
+		return res.json(FormatResponse({
 			user: { ...user, password: null },
 			token: Utils.generateJwtToken({ id: user.id })
-		})
+		}))
 	}
 
 	create = async (req: Request, res: Response): Promise<Response> => {
@@ -52,10 +52,10 @@ export default class AuthController {
 
 		/** Insert user and returns data with JWT token */
 		return userService.create(user).then(inserted => {
-			return Ok(res, {
+			return res.status(201).json(FormatResponse({
 				user: { ...inserted, password: null },
 				token: Utils.generateJwtToken({ id: inserted.id })
-			}, null, 201)
+			}))
 		}).catch(() => {
 			return InternalServerError(res, ErrorKeys.user_save_error)
 		})

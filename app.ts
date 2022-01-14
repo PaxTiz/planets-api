@@ -15,7 +15,11 @@ app.use(helmet())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 app.use(morgan('dev'))
-app.use(cors())
+app.use(cors({
+    credentials: true,
+    origin: ['*'],
+    optionsSuccessStatus: 200
+}))
 app.use(compression())
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ message: ErrorKeys.server_error })
