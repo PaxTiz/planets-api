@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { FormatResponse, Unauthorized, UnprocessableEntity, InternalServerError } from './controller'
+import { Ok, UnprocessableEntity, InternalServerError } from './controller'
 import userService from '../services/user_service'
 import Utils from '../utils/crypt'
 import FormError from '../utils/form_error'
@@ -11,19 +11,19 @@ export default class AuthController {
 		/** A user exists wth given username ? */
 		const user = await userService.findOneBy('username', req.body.username)
 		if (!user) {
-			return Unauthorized(res, ErrorKeys.username_not_found)
+			return UnprocessableEntity(res, ErrorKeys.username_not_found)
 		}
 
 		/** If a user exists, is the password correct ? */
 		const isValidPassword = await Utils.validateBcrypt(req.body.password, user.password)
 		if (!isValidPassword) {
-			return Unauthorized(res, ErrorKeys.password_not_match)
+			return UnprocessableEntity(res, ErrorKeys.password_not_match)
 		}
 
-		return res.json(FormatResponse({
+		return Ok(res, {
 			user: { ...user, password: null },
 			token: Utils.generateJwtToken({ id: user.id })
-		}))
+		})
 	}
 
 	create = async (req: Request, res: Response): Promise<Response> => {
@@ -52,10 +52,10 @@ export default class AuthController {
 
 		/** Insert user and returns data with JWT token */
 		return userService.create(user).then(inserted => {
-			return res.status(201).json(FormatResponse({
+			return Ok(res, {
 				user: { ...inserted, password: null },
 				token: Utils.generateJwtToken({ id: inserted.id })
-			}))
+			}, 201)
 		}).catch(() => {
 			return InternalServerError(res, ErrorKeys.user_save_error)
 		})

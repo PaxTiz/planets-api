@@ -4,7 +4,7 @@ import Utils from '../utils/crypt'
 import { user as User } from '@prisma/client'
 import userService from '../services/user_service'
 import ErrorKeys from '../utils/error_keys'
-import { Unauthorized } from '../controllers/controller'
+import { Unauthenticated } from '../controllers/controller'
 
 declare global {
     namespace Express {
@@ -36,18 +36,18 @@ export function validate(req: Request, res: Response, next: NextFunction) {
 export async function isAuth(req: Request, res: Response, next: NextFunction) {
     const header = req.get('authorization')
     if (!header) {
-        return Unauthorized(res, ErrorKeys.unauthorized)
+        return Unauthenticated(res)
     }
 
     const token = header.split(' ')[1].trim()
     const user = Utils.decodeJWT(token) as any
     if (!user) {
-        return Unauthorized(res, ErrorKeys.unauthorized)
+        return Unauthenticated(res)
     }
 
     const fromDb = await userService.findOneBy('id', user.id)
     if (!fromDb) {
-        return Unauthorized(res, ErrorKeys.unauthorized)
+        return Unauthenticated(res)
     }
     req.user = fromDb
     req.auth = true

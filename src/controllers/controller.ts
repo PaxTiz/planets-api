@@ -2,7 +2,7 @@ import { Response } from 'express'
 import ErrorKey from '../utils/error_keys'
 import FormError from '../utils/form_error'
 
-type HttpResponse = {
+interface HttpResponse {
 	message: ErrorKey | null,
 	data: Object | Array<any> | string
 }
@@ -15,7 +15,7 @@ type HttpResponse = {
  * @param message message to send with the body
  * @returns response with specified status code and formatted body
  */
-export function FormatResponse(data: any, message: ErrorKey | null = null): HttpResponse {
+const FormatResponse = (data: any, message: ErrorKey | null = null): HttpResponse => {
 	return {
 		message,
 		data
@@ -31,8 +31,8 @@ export function FormatResponse(data: any, message: ErrorKey | null = null): Http
  * @param status the status code associated to the response, 200 by default
  * @returns response with specified status code and formatted body
  */
-export function Ok(res: Response, data: HttpResponse, status: number = 200) {
-	return res.status(status).json(data)
+export function Ok(res: Response, data: any, status: number = 200) {
+	return res.status(status).json(FormatResponse(data))
 }
 
 /**
@@ -49,14 +49,26 @@ export function BadRequest(res: Response, message: ErrorKey) {
 
 /**
  * Handle a 401 status.
+ * Use it when user is not logged
+ * 
+ * @param res express response getting from the router
+ * @param message a key representing what is invalid
+ * @returns response with 401 status code and formatted error
+ */
+export function Unauthenticated(res: Response) {
+	return res.status(401).json(FormatResponse(null, ErrorKey.unauthenticated))
+}
+
+/**
+ * Handle a 403 status.
  * Use it when user is not authorized to access to something
  * 
  * @param res express response getting from the router
  * @param message a key representing what is invalid
  * @returns response with 401 status code and formatted error
  */
- export function Unauthorized(res: Response, message: ErrorKey | null = null) {
-	return res.status(401).json(FormatResponse(null, message))
+export function Forbidden(res: Response) {
+	return res.status(403).json(FormatResponse(null, ErrorKey.forbidden))
 }
 
 /**
@@ -67,7 +79,7 @@ export function BadRequest(res: Response, message: ErrorKey) {
  * @param message a key representing what is invalid
  * @returns response with 422 status code and formatted errors
  */
- export function UnprocessableEntity(res: Response, errors: Array<FormError>) {
+export function UnprocessableEntity(res: Response, errors: Array<FormError> | ErrorKey) {
 	return res.status(422).json(FormatResponse(errors, null))
 }
 
@@ -79,6 +91,6 @@ export function BadRequest(res: Response, message: ErrorKey) {
  * @param error a key representing an error that should never happend in normal conditions
  * @returns response with 500 status code and formatted error
  */
- export function InternalServerError(res: Response, error: ErrorKey): Response {
+export function InternalServerError(res: Response, error: ErrorKey): Response {
 	return res.status(500).json(FormatResponse(null, error))
 }

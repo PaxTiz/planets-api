@@ -9,6 +9,7 @@ import Logger from './src/utils/logger'
 import ErrorKeys from './src/utils/error_keys'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
+import 'express-async-errors'
 
 import { isAuth } from './src/middlewares/middleware'
 dotenv.config()

@@ -1,7 +1,7 @@
 enum ErrorKeys {
     /** === GENERIC ERRORS KEYS === */
     not_found = 'not_found',
-    unauthorized= 'unauthorized',
+    unauthenticated = 'unauthenticated',
     forbidden = 'forbidden',
     server_error = 'server_error',
 
