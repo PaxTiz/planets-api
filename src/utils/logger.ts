@@ -10,5 +10,4 @@ export default class Logger {
     static debug(message: any) {
         console.log(`[DEBUG] - ${message}`)
     }
-
 }

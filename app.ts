@@ -1,17 +1,17 @@
-import fs from 'fs'
-import express, { NextFunction, Request, Response } from 'express'
-import helmet from 'helmet'
-import cors from 'cors'
-import morgan from 'morgan'
-import compression from 'compression'
-import dotenv from 'dotenv'
-import Logger from './src/utils/logger'
-import ErrorKeys from './src/utils/error_keys'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
-import 'express-async-errors'
-
+import compression from 'compression'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import express, { NextFunction, Request, Response } from 'express'
+import "express-async-errors"
+import fs from 'fs'
+import helmet from 'helmet'
+import morgan from 'morgan'
 import { isAuth } from './src/middlewares/middleware'
+import ErrorKeys from './src/utils/error_keys'
+import Logger from './src/utils/logger'
+
 dotenv.config()
 
 const app = express()
@@ -31,7 +31,7 @@ Sentry.init({
 })
 
 app.use(Sentry.Handlers.requestHandler({
-    user: ['id', 'username',  'email', 'roleId']
+    user: ['id', 'username', 'email', 'roleId']
 }))
 app.use(Sentry.Handlers.tracingHandler())
 

@@ -9,15 +9,15 @@ import { Unauthenticated } from '../controllers/controller'
 declare global {
     namespace Express {
         interface Request {
-            user: User,
-            auth: Boolean
+            user: User
+            auth: boolean
         }
     }
 }
 
 /**
  * Validate the request by checking if all values
- * from the query, the body and the parameters 
+ * from the query, the body and the parameters
  * are matching rules
  */
 export function validate(req: Request, res: Response, next: NextFunction) {
@@ -55,14 +55,6 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 export const applyCommonFilters = [
-    query('limit')
-        .optional()
-        .isInt()
-        .withMessage(ErrorKeys.limit_is_not_a_valid_number)
-        .toInt(),
-    query('offset')
-        .optional()
-        .isInt()
-        .withMessage(ErrorKeys.offset_is_not_a_valid_number)
-        .toInt(),
+    query('limit').optional().isInt().withMessage(ErrorKeys.limit_is_not_a_valid_number).toInt(),
+    query('offset').optional().isInt().withMessage(ErrorKeys.offset_is_not_a_valid_number).toInt(),
 ]

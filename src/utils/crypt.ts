@@ -2,56 +2,57 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export default class Utils {
+    /**
+     * Encrypt a value and returns it as bcrypt
+     *
+     * @param value the value to crypt
+     * @returns the value crypted with bcrypt
+     */
+    static async crypt(value: string): Promise<string> {
+        return bcrypt.hash(value, 10).then((hash: any) => hash)
+    }
 
-	/**
-	 * Encrypt a value and returns it as bcrypt
-	 * 
-	 * @param value the value to crypt
-	 * @returns the value crypted with bcrypt
-	 */
-	static async crypt(value: string): Promise<string> {
-		return bcrypt.hash(value, 10).then((hash: any) => hash)
-	}
+    /**
+     * Check if a string and a hash are equals or not
+     *
+     * @param value the plain value to check
+     * @param hash the crypted string of the value
+     * @returns true if value and hash are equals, or false
+     */
+    static async validateBcrypt(value: string, hash: string): Promise<boolean> {
+        return await bcrypt.compare(value, hash)
+    }
 
-	/**
-	 * Check if a string and a hash are equals or not
-	 * 
-	 * @param value the plain value to check
-	 * @param hash the crypted string of the value
-	 * @returns true if value and hash are equals, or false
-	 */
-	static async validateBcrypt(value: string, hash: string): Promise<boolean> {
-		return await bcrypt.compare(value, hash)
-	}
+    /**
+     * Generate a JWT token
+     *
+     * @param value value to encode in the JWT
+     * @param expiration expiration date of the token (default to 1 hour)
+     * @returns the generated JWT token
+     */
+    static generateJwtToken(value: any, expiration: number = Math.floor(Date.now() / 1000) + 60 * 60): string {
+        return jwt.sign(
+            {
+                exp: expiration,
+                data: JSON.stringify(value),
+            },
+            process.env.JWT_SECRET as string,
+        )
+    }
 
-	/**
-	 * Generate a JWT token
-	 * 
-	 * @param value value to encode in the JWT
-	 * @param expiration expiration date of the token (default to 1 hour)
-	 * @returns the generated JWT token
-	 */
-	static generateJwtToken(value: any, expiration: number = Math.floor(Date.now() / 1000) + (60 * 60)): string {
-		return jwt.sign({
-			exp: expiration,
-			data: JSON.stringify(value)
-		}, process.env.JWT_SECRET as string)
-	}
+    /**
+     * Decode and parse data from a JWT token
+     *
+     * @param token the token to decode
+     * @returns the data of the token if it's valid, or null
+     */
+    static decodeJWT(token: string): Object | null | void {
+        return jwt.verify(token, process.env.JWT_SECRET as string, (err, data) => {
+            if (err) {
+                return null
+            }
 
-	/**
-	 * Decode and parse data from a JWT token
-	 * 
-	 * @param token the token to decode
-	 * @returns the data of the token if it's valid, or null
-	 */
-	static decodeJWT(token: string): Object | null | void {
-		return jwt.verify(token, process.env.JWT_SECRET as string, (err, data) => {
-			if (err) {
-				return null
-			}
-
-			return JSON.parse(data!.data)
-		})
-	}
-
+            return JSON.parse(data!.data)
+        })
+    }
 }

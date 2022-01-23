@@ -1,6 +1,6 @@
-import { Router } from "express"
-import middleware from "../middlewares/auth_middleware"
-import Controller from "../controllers/auth_controller"
+import { Router } from 'express'
+import middleware from '../middlewares/auth_middleware'
+import Controller from '../controllers/auth_controller'
 
 const controller = new Controller()
 const router = Router()

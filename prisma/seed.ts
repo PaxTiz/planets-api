@@ -1,5 +1,5 @@
-import { PrismaClient } from ".prisma/client"
-import Logger from "../src/utils/logger"
+import { PrismaClient } from '.prisma/client'
+import Logger from '../src/utils/logger'
 
 const client = new PrismaClient()
 
@@ -23,8 +23,8 @@ const seed = async () => {
         Logger.info('Create constellations')
         await client.constellation.create({
             data: {
-                name: 'Human'
-            }
+                name: 'Human',
+            },
         })
 
         Logger.info('Create galaxies')
@@ -34,11 +34,11 @@ const seed = async () => {
                 { name: 'Galaxy du tourbillon' },
                 { name: 'Objet de Hoag' },
                 { name: 'I Zwicky 18' },
-            ]
+            ],
         })
         const milkyWay = await client.galaxy.findFirst({
             where: { name: 'Voie lactée' },
-            select: { id: true }
+            select: { id: true },
         })
         if (milkyWay) {
             Logger.info('Create planets')
@@ -46,7 +46,8 @@ const seed = async () => {
                 data: [
                     {
                         name: 'Mercure',
-                        description: "Mercure est l'une des quatre planètes telluriques du Système solaire, et possède un corps rocheux comme la Terre. C'est également la plus petite, avec un rayon équatorial de 2 439,7 km. Mercure est également plus petite — bien que plus massive — que deux satellites naturels du Système solaire, Ganymède et Titan.",
+                        description:
+                            "Mercure est l'une des quatre planètes telluriques du Système solaire, et possède un corps rocheux comme la Terre. C'est également la plus petite, avec un rayon équatorial de 2 439,7 km. Mercure est également plus petite — bien que plus massive — que deux satellites naturels du Système solaire, Ganymède et Titan.",
                         composition: null,
                         distance: 58000000,
                         distance_unit: 'km',
@@ -55,7 +56,8 @@ const seed = async () => {
                     },
                     {
                         name: 'Venus',
-                        description: "Vénus est la deuxième planète du Système solaire par ordre d'éloignement au Soleil, et la sixième plus grosse aussi bien par la masse que le diamètre. Elle doit son nom à la déesse romaine de l'amour. Vénus orbite autour du Soleil tous les 224,7 jours terrestres.",
+                        description:
+                            "Vénus est la deuxième planète du Système solaire par ordre d'éloignement au Soleil, et la sixième plus grosse aussi bien par la masse que le diamètre. Elle doit son nom à la déesse romaine de l'amour. Vénus orbite autour du Soleil tous les 224,7 jours terrestres.",
                         composition: null,
                         distance: 108000000,
                         distance_unit: 'km',
@@ -64,7 +66,8 @@ const seed = async () => {
                     },
                     {
                         name: 'Terre',
-                        description: "La Terre est la troisième planète par ordre d'éloignement au Soleil et la cinquième plus grande du Système solaire aussi bien par la masse que le diamètre. Par ailleurs, elle est le seul objet céleste connu pour abriter la vie",
+                        description:
+                            "La Terre est la troisième planète par ordre d'éloignement au Soleil et la cinquième plus grande du Système solaire aussi bien par la masse que le diamètre. Par ailleurs, elle est le seul objet céleste connu pour abriter la vie",
                         composition: null,
                         distance: 152000000,
                         distance_unit: 'km',
@@ -73,7 +76,8 @@ const seed = async () => {
                     },
                     {
                         name: 'Mars',
-                        description: "Mars est la quatrième planète du Système solaire par ordre croissant de la distance au Soleil et la deuxième par ordre croissant de la taille et de la masse. Son éloignement au Soleil est compris entre 1,381 et 1,666 UA, avec une période orbitale de 669,58 jours martiens.",
+                        description:
+                            'Mars est la quatrième planète du Système solaire par ordre croissant de la distance au Soleil et la deuxième par ordre croissant de la taille et de la masse. Son éloignement au Soleil est compris entre 1,381 et 1,666 UA, avec une période orbitale de 669,58 jours martiens.',
                         composition: null,
                         distance: 227939200,
                         distance_unit: 'km',
@@ -82,7 +86,8 @@ const seed = async () => {
                     },
                     {
                         name: 'Jupiter',
-                        description: "Jupiter est la cinquième planète du Système solaire par ordre d'éloignement au Soleil, et la plus grande par la taille et la masse devant Saturne, qui est comme elle une planète géante gazeuse.",
+                        description:
+                            "Jupiter est la cinquième planète du Système solaire par ordre d'éloignement au Soleil, et la plus grande par la taille et la masse devant Saturne, qui est comme elle une planète géante gazeuse.",
                         composition: null,
                         distance: 778600000,
                         distance_unit: 'km',
@@ -91,7 +96,8 @@ const seed = async () => {
                     },
                     {
                         name: 'Saturne',
-                        description: "Saturne est la sixième planète du Système solaire par ordre d'éloignement au Soleil, et la deuxième plus grande par la taille et la masse après Jupiter, qui est comme elle une planète géante gazeuse.",
+                        description:
+                            "Saturne est la sixième planète du Système solaire par ordre d'éloignement au Soleil, et la deuxième plus grande par la taille et la masse après Jupiter, qui est comme elle une planète géante gazeuse.",
                         composition: null,
                         distance: 1430000000,
                         distance_unit: 'km',
@@ -100,7 +106,8 @@ const seed = async () => {
                     },
                     {
                         name: 'Uranus',
-                        description: "Uranus est la septième planète du Système solaire par ordre d'éloignement au Soleil. Elle orbite autour de celui-ci à une distance d'environ 19,2 unités astronomiques, avec une période de révolution de 84,05 années terrestres.",
+                        description:
+                            "Uranus est la septième planète du Système solaire par ordre d'éloignement au Soleil. Elle orbite autour de celui-ci à une distance d'environ 19,2 unités astronomiques, avec une période de révolution de 84,05 années terrestres.",
                         composition: null,
                         distance: 2800000000,
                         distance_unit: 'km',
@@ -109,23 +116,24 @@ const seed = async () => {
                     },
                     {
                         name: 'Neptune',
-                        description: "Neptune est la huitième planète par ordre d'éloignement au Soleil et la plus éloignée connue du Système solaire. Elle orbite autour du Soleil à une distance d'environ 30,1 UA, avec une excentricité orbitale moitié moindre que celle de la Terre et une période de révolution de 164,79 ans.",
+                        description:
+                            "Neptune est la huitième planète par ordre d'éloignement au Soleil et la plus éloignée connue du Système solaire. Elle orbite autour du Soleil à une distance d'environ 30,1 UA, avec une excentricité orbitale moitié moindre que celle de la Terre et une période de révolution de 164,79 ans.",
                         composition: null,
                         distance: 4500000000,
                         distance_unit: 'km',
                         image: 'https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg',
                         galaxyId: milkyWay.id,
                     },
-                ]
+                ],
             })
         }
-    
+
         Logger.info('Create roles')
         await client.role.create({
             data: {
                 name: 'default',
-                displayName: 'Member'
-            }
+                displayName: 'Member',
+            },
         })
 
         Logger.info('Create quizz categories')
@@ -137,7 +145,7 @@ const seed = async () => {
                 { name: 'Universe' },
                 { name: 'Space Exploration' },
                 { name: 'Important People' },
-            ]
+            ],
         })
     })
 }
@@ -147,14 +155,15 @@ const main = async () => {
     return seed().catch((e: Error) => e)
 }
 
-main().then(() => {
-    Logger.info('Database seeded successfully')
-})
-.catch((e) => {
-    Logger.error('Failed to seed database because :')
-    Logger.error(e)
-})
-.finally(() => {
-    Logger.info('End seeding')
-    client.$disconnect()
-})
+main()
+    .then(() => {
+        Logger.info('Database seeded successfully')
+    })
+    .catch((e) => {
+        Logger.error('Failed to seed database because :')
+        Logger.error(e)
+    })
+    .finally(() => {
+        Logger.info('End seeding')
+        client.$disconnect()
+    })

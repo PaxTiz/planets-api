@@ -7,16 +7,14 @@ const request = async (method, url, body, auth) => {
         let response = null
         if (!!auth) {
             const headers = {
-                headers: { 'Authorization': 'Bearer ' + await login() }
+                headers: { Authorization: 'Bearer ' + (await login()) },
             }
 
-            response = (['get', 'delete'].includes(method)) 
+            response = ['get', 'delete'].includes(method)
                 ? await http[method](url, headers)
                 : await http[method](url, body, headers)
         }
-        response = (['get', 'delete'].includes(method)) 
-            ? await http[method](url)
-            : await http[method](url, body)
+        response = ['get', 'delete'].includes(method) ? await http[method](url) : await http[method](url, body)
 
         return Promise.resolve({ data: response.data, status: response.status })
     } catch (e) {
