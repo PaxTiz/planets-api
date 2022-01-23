@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import { Ok, UnprocessableEntity, InternalServerError } from './controller'
 import userService from '../services/user_service'
 import Utils from '../utils/crypt'
-import FormError from '../utils/form_error'
 import ErrorKeys from '../utils/error_keys'
+import FormError from '../utils/form_error'
+import { Ok, UnprocessableEntity } from './controller'
 
 export default class AuthController {
     login = async (req: Request, res: Response): Promise<Response> => {
@@ -50,17 +50,15 @@ export default class AuthController {
         }
 
         /** Insert user and returns data with JWT token */
-        return userService
-            .create(user)
-            .then((inserted) => {
-                return Ok(
-                    res,
-                    {
-                        user: { ...inserted, password: null },
-                        token: Utils.generateJwtToken({ id: inserted.id }),
-                    },
-                    201,
-                )
-            })
+        return userService.create(user).then((inserted) => {
+            return Ok(
+                res,
+                {
+                    user: { ...inserted, password: null },
+                    token: Utils.generateJwtToken({ id: inserted.id }),
+                },
+                201,
+            )
+        })
     }
 }

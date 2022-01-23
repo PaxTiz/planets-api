@@ -1,5 +1,5 @@
-const { expect } = require('chai')
-const request = require('./utils/request')
+import { expect } from 'chai'
+import request from './utils/request'
 
 const username = 'Test User'
 const email = 'test@test.com'

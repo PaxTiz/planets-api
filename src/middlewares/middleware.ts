@@ -1,12 +1,13 @@
-import { query, validationResult } from 'express-validator'
-import { NextFunction, Request, Response } from 'express'
-import Utils from '../utils/crypt'
 import { user as User } from '@prisma/client'
-import userService from '../services/user_service'
-import ErrorKeys from '../utils/error_keys'
+import { NextFunction, Request, Response } from 'express'
+import { query, validationResult } from 'express-validator'
 import { Unauthenticated } from '../controllers/controller'
+import userService from '../services/user_service'
+import Utils from '../utils/crypt'
+import ErrorKeys from '../utils/error_keys'
 
 declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Express {
         interface Request {
             user: User
@@ -40,7 +41,7 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
     }
 
     const token = header.split(' ')[1].trim()
-    const user = Utils.decodeJWT(token) as any
+    const user = Utils.decodeJWT(token) as { id: number }
     if (!user) {
         return Unauthenticated(res)
     }

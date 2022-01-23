@@ -1,5 +1,5 @@
-const http = require('./http')
-const login = require('./login')
+import http from './http'
+import login from './login'
 
 const request = async (method, url, body, auth) => {
     method = method.toLowerCase()
@@ -22,4 +22,4 @@ const request = async (method, url, body, auth) => {
     }
 }
 
-module.exports = request
+export default request

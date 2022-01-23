@@ -10,7 +10,9 @@
     "migrate": "npx prisma migrate dev && npx prisma generate",
     "seed": "npx prisma db seed",
     "pull": "npx prisma db pull",
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha",
+    "lint": "./node_modules/eslint/bin/eslint.js '*/**/*.{js,ts}' --quiet",
+    "lint:fix": "./node_modules/eslint/bin/eslint.js '*/**/*.{js,ts}' --quiet --fix"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

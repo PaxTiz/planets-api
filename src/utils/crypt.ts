@@ -9,7 +9,7 @@ export default class Utils {
      * @returns the value crypted with bcrypt
      */
     static async crypt(value: string): Promise<string> {
-        return bcrypt.hash(value, 10).then((hash: any) => hash)
+        return bcrypt.hash(value, 10)
     }
 
     /**
@@ -30,7 +30,7 @@ export default class Utils {
      * @param expiration expiration date of the token (default to 1 hour)
      * @returns the generated JWT token
      */
-    static generateJwtToken(value: any, expiration: number = Math.floor(Date.now() / 1000) + 60 * 60): string {
+    static generateJwtToken(value: unknown, expiration: number = Math.floor(Date.now() / 1000) + 60 * 60): string {
         return jwt.sign(
             {
                 exp: expiration,
@@ -46,13 +46,13 @@ export default class Utils {
      * @param token the token to decode
      * @returns the data of the token if it's valid, or null
      */
-    static decodeJWT(token: string): Object | null | void {
+    static decodeJWT(token: string): unknown {
         return jwt.verify(token, process.env.JWT_SECRET as string, (err, data) => {
             if (err) {
                 return null
             }
 
-            return JSON.parse(data!.data)
+            return JSON.parse(data?.data)
         })
     }
 }

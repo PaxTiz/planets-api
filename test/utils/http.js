@@ -1,7 +1,8 @@
-const axios = require('axios')
-require('dotenv').config()
+import { create } from 'axios'
+import dotenv from 'dotenv'
+dotenv.config()
 
-const http = axios.create()
+const http = create()
 http.defaults.baseURL = process.env.BASE_URL
 
-module.exports = http
+export default http

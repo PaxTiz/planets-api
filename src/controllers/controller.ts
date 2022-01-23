@@ -4,7 +4,7 @@ import FormError from '../utils/form_error'
 
 interface HttpResponse {
     message: ErrorKey | null
-    data: Object | Array<any> | string
+    data: unknown
 }
 
 /**
@@ -15,7 +15,7 @@ interface HttpResponse {
  * @param message message to send with the body
  * @returns response with specified status code and formatted body
  */
-const FormatResponse = (data: any, message: ErrorKey | null = null): HttpResponse => {
+const FormatResponse = (data: unknown, message: ErrorKey | null = null): HttpResponse => {
     return {
         message,
         data,
@@ -31,7 +31,7 @@ const FormatResponse = (data: any, message: ErrorKey | null = null): HttpRespons
  * @param status the status code associated to the response, 200 by default
  * @returns response with specified status code and formatted body
  */
-export function Ok(res: Response, data: any, status = 200) {
+export function Ok(res: Response, data: unknown, status = 200) {
     return res.status(status).json(FormatResponse(data))
 }
 

@@ -1,4 +1,4 @@
-const http = require('./http')
+import http from './http'
 
 const login = async () => {
     const response = await http.post('/auth/login', {
@@ -8,4 +8,4 @@ const login = async () => {
     return response.data.token
 }
 
-module.exports = login
+export default login
