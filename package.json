@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon app.ts",
     "build": "tsc",
-    "start": "node ./dist/app.js",
+    "start": "NODE_ENV=production node ./dist/app.js",
     "migrate": "npx prisma migrate dev && npx prisma generate",
     "seed": "npx prisma db seed",
     "pull": "npx prisma db pull",
