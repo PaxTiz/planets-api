@@ -1,5 +1,6 @@
 import { user } from '@prisma/client'
-import prisma from '../client'
+import prisma, { UserWithRole } from '../client'
+import roleService from './role_service'
 
 export interface UserCreateDTO {
     username: string
@@ -42,13 +43,14 @@ const findOneBy = async (column: string, value: any): Promise<user | null> => {
  * @param user object containing username, email and password's bcrypt hash
  * @returns the inserted user
  */
-const create = async (user: UserCreateDTO): Promise<user> => {
+const create = async (user: UserCreateDTO): Promise<UserWithRole> => {
+    const role = await roleService.findByName('default')
     return await prisma.user.create({
         data: {
             username: user.username,
             email: user.email,
             password: user.password,
-            roleId: (await prisma.role.findFirst({ where: { name: 'default' } }))!.id,
+            roleId: role.id,
         },
         include: { role: true },
     })
