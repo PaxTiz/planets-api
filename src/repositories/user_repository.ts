@@ -1,6 +1,6 @@
 import { user } from '@prisma/client'
 import prisma, { UserWithRole } from '../client'
-import roleService from './role_service'
+import roleService from './role_repository'
 
 export interface UserCreateDTO {
     username: string
