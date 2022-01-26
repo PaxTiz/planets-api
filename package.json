@@ -46,7 +46,7 @@
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.4.2",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
-    "@typescript-eslint/parser": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.1",
     "axios": "^0.24.0",
     "chai": "^4.3.4",
     "eslint": "^8.7.0",
