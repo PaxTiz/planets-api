@@ -52,7 +52,11 @@ export default class Utils {
                 return null
             }
 
-            return JSON.parse(data?.data)
+            if (typeof data === 'string') {
+                return null
+            } else {
+                return JSON.parse(data?.data)
+            }
         })
     }
 }
