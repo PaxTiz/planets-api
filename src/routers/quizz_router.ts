@@ -1,9 +1,11 @@
-import { Router } from 'express'
+import { Express, Router } from 'express'
 import controller from '../controllers/quizz_controller'
 import middleware from '../middlewares/quizz_middleware'
 
-const router = Router()
-router.get('/', middleware.findAll, controller.index)
-router.get('/categories', middleware.findAll, controller.findCategories)
+module.exports = (app: Express) => {
+    const router = Router()
+    app.use('/quizz', router)
 
-module.exports = router
+    router.get('/', middleware.findAll, controller.index)
+    router.get('/categories', middleware.findAll, controller.findCategories)
+}

@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import { assert } from 'console'
 import jwt from 'jsonwebtoken'
 
 export default class Utils {
@@ -30,7 +31,10 @@ export default class Utils {
      * @param expiration expiration date of the token (default to 1 hour)
      * @returns the generated JWT token
      */
-    static generateJwtToken(value: unknown, expiration: number = Math.floor(Date.now() / 1000) + 60 * 60): string {
+    static generateJwtToken(
+        value: unknown,
+        expiration: number = Math.floor(Date.now() / 1000) + 60 * 60,
+    ): string {
         return jwt.sign(
             {
                 exp: expiration,
@@ -50,12 +54,15 @@ export default class Utils {
         return jwt.verify(token, process.env.JWT_SECRET as string, (err, data) => {
             if (err) {
                 return null
+            } else if (data === null) {
+                throw Error()
             }
 
+            assert(data !== undefined)
             if (typeof data === 'string') {
-                return null
+                return JSON.parse(data)
             } else {
-                return JSON.parse(data?.data)
+                return data
             }
         })
     }

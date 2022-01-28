@@ -1,8 +1,10 @@
-import { Router } from 'express'
+import { Express, Router } from 'express'
 import controller from '../controllers/planet_controller'
 import middleware from '../middlewares/planet_middleware'
 
-const router = Router()
-router.get('/', middleware.findAll, controller.index)
+module.exports = (app: Express) => {
+    const router = Router()
+    app.use('/planets', router)
 
-module.exports = router
+    router.get('/', middleware.findAll, controller.index)
+}

@@ -74,7 +74,7 @@ export default class Application {
         this.app.use(compression())
     }
 
-    private async initRoutes() {
+    private initRoutes() {
         readdirSync(join(__dirname, 'routers')).forEach((file) => {
             if (!file.startsWith('_')) {
                 const filename = file.split('.')[0]
@@ -82,7 +82,7 @@ export default class Application {
                 const routeName = filename.slice(0, routerIndex).replace('_', '-')
                 Logger.info(`Mount route '/${routeName}' with router '${filename}'`)
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
-                this.app.use(`/${routeName}`, require(join(__dirname, 'routers', filename)))
+                require(join(__dirname, 'routers', filename))(this.app)
             }
         })
     }
@@ -97,6 +97,9 @@ export default class Application {
         this.app.use(Sentry.Handlers.errorHandler())
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+            if (this.isDevelopment) {
+                console.log(err)
+            }
             return res.status(500).json({ message: ErrorKeys.server_error })
         })
     }
