@@ -4,6 +4,8 @@ import { Ok } from './controller'
 
 export default {
     async index(req: Request, res: Response) {
-        return planetRepository.findAll(req.query.galaxy === 'true').then((planets) => Ok(res, planets))
+        return planetRepository
+            .findAll(req.query.galaxy === 'true')
+            .then((planets) => Ok(res, planets))
     },
 }

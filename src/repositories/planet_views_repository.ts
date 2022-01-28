@@ -1,7 +1,11 @@
 import { planet_views as PlanetView } from '@prisma/client'
 import prisma from '../client'
 
-const findByPlanetAndUserOrIp = async (planet: number, user: number, ip: string): Promise<PlanetView | null> => {
+const findByPlanetAndUserOrIp = async (
+    planet: number,
+    user: number,
+    ip: string,
+): Promise<PlanetView | null> => {
     return await prisma.planet_views.findFirst({
         where: {
             ip,
@@ -20,7 +24,7 @@ const upsert = async (planet: number, user: number, ip: string): Promise<PlanetV
                 count: { increment: 1 },
             },
             where: {
-                id: pv!.id,
+                id: pv?.id,
             },
             include: { planet: true, user: true },
         })
