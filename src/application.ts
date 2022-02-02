@@ -89,7 +89,7 @@ export default class Application {
 
     private initNotFoundHandler() {
         this.app.get('*', (req: Request, res: Response) => {
-            res.status(404).json({ message: 'Page not found' })
+            return res.status(404).json({ message: ErrorKeys.not_found })
         })
     }
 
@@ -97,9 +97,7 @@ export default class Application {
         this.app.use(Sentry.Handlers.errorHandler())
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-            if (this.isDevelopment) {
-                console.log(err)
-            }
+            Logger.error(err)
             return res.status(500).json({ message: ErrorKeys.server_error })
         })
     }

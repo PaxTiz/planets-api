@@ -10,13 +10,13 @@ export default {
         /** A user exists wth given username ? */
         const user = await userRepository.findOneBy('username', req.body.username)
         if (!user) {
-            return UnprocessableEntity(res, ErrorKeys.username_not_found)
+            return UnprocessableEntity(res, new FormError('username', ErrorKeys.username_not_found))
         }
 
         /** If a user exists, is the password correct ? */
         const isValidPassword = await Utils.validateBcrypt(req.body.password, user.password)
         if (!isValidPassword) {
-            return UnprocessableEntity(res, ErrorKeys.password_not_match)
+            return UnprocessableEntity(res, new FormError('password', ErrorKeys.password_not_match))
         }
 
         return Ok(res, {

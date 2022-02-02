@@ -59,8 +59,11 @@ export function Forbidden(res: Response) {
  * @param message a key representing what is invalid
  * @returns response with 422 status code and formatted errors
  */
-export function UnprocessableEntity(res: Response, errors: Array<FormError> | ErrorKey) {
-    return res.status(422).json(errors)
+export function UnprocessableEntity(res: Response, errors: Array<FormError> | FormError) {
+    if (errors instanceof FormError) {
+        errors = [errors]
+    }
+    return res.status(422).json({ errors })
 }
 
 /**

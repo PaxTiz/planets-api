@@ -58,7 +58,7 @@ export default class Utils {
                 throw Error()
             }
 
-            assert(data !== undefined)
+            assert(data)
             if (typeof data === 'string') {
                 return JSON.parse(data)
             } else {

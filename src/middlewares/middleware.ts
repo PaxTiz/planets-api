@@ -56,6 +56,14 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 export const applyCommonFilters = [
-    query('limit').optional().isInt().withMessage(ErrorKeys.limit_is_not_a_valid_number).toInt(),
-    query('offset').optional().isInt().withMessage(ErrorKeys.offset_is_not_a_valid_number).toInt(),
+    query('limit')
+        .optional()
+        .isInt({ min: 0 })
+        .withMessage(ErrorKeys.limit_is_not_a_valid_number)
+        .toInt(),
+    query('offset')
+        .optional()
+        .isInt({ min: 0 })
+        .withMessage(ErrorKeys.offset_is_not_a_valid_number)
+        .toInt(),
 ]
