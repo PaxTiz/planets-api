@@ -94,11 +94,14 @@ export default class Application {
     }
 
     private initErrorHandler() {
-        this.app.use(Sentry.Handlers.errorHandler())
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-            Logger.error(err)
-            return res.status(500).json({ message: ErrorKeys.server_error })
+            if (err instanceof Error && err.name === 'NotFoundError') {
+                return res.status(404).json({ message: ErrorKeys.not_found })
+            } else {
+                Logger.error(err)
+                return res.status(500).json({ message: ErrorKeys.server_error })
+            }
         })
     }
 
