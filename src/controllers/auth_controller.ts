@@ -61,4 +61,8 @@ export default {
             )
         })
     },
+
+    async me(req: Request, res: Response) {
+        return Ok(res, { ...req.user, password: null })
+    },
 }

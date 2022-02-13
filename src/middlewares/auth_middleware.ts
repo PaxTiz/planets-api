@@ -1,6 +1,6 @@
 import { body } from 'express-validator'
-import { validate } from './middleware'
 import ErrorKeys from '../utils/error_keys'
+import { isAuth, validate } from './middleware'
 
 export default {
     login: [
@@ -25,4 +25,6 @@ export default {
             .trim(),
         validate,
     ],
+
+    me: [isAuth],
 }
