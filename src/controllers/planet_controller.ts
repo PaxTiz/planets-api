@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import planetRepository from '../repositories/planet_repository'
-import { Ok } from './controller'
+import service from '../services/planet_service'
+import { ServiceResponse } from './controller'
 
 export default {
     async index(req: Request, res: Response) {
-        return planetRepository
-            .findAll(req.query.galaxy === 'true')
-            .then((planets) => Ok(res, planets))
+        const { galaxy } = req.query
+        const response = await service.findAll(galaxy === 'true')
+        return ServiceResponse(res, response)
     },
 }
