@@ -52,6 +52,17 @@ export function Forbidden(res: Response) {
 }
 
 /**
+ * Handle a 404 status.
+ * Use it when a ressource doesn't exists
+ *
+ * @param res express response getting from the router
+ * @returns response with 404 status code and formatted error
+ */
+export function NotFound(res: Response) {
+    return res.status(404).json({ message: ErrorKey.not_found })
+}
+
+/**
  * Handle a 422 status.
  * Use it when request body cannot be used as expected (eg. missing data when submitting a form)
  *
@@ -76,4 +87,18 @@ export function UnprocessableEntity(res: Response, errors: Array<FormError> | Fo
  */
 export function InternalServerError(res: Response): Response {
     return res.status(500).json({ message: ErrorKey.server_error })
+}
+
+export function ServiceResponse(res: Response, data: unknown, status = 200) {
+    if (!data) {
+        return NotFound(res)
+    }
+    if (
+        data instanceof FormError ||
+        (Array.isArray(data) && data.every((e) => e instanceof FormError))
+    ) {
+        return UnprocessableEntity(res, data)
+    }
+
+    return Ok(res, data, status)
 }

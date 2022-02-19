@@ -1,68 +1,21 @@
 import { Request, Response } from 'express'
-import userRepository from '../repositories/user_repository'
-import Utils from '../utils/crypt'
-import ErrorKeys from '../utils/error_keys'
-import FormError from '../utils/form_error'
-import { Ok, UnprocessableEntity } from './controller'
+import authService from '../services/auth_service'
+import { ServiceResponse } from './controller'
 
 export default {
     async login(req: Request, res: Response) {
-        /** A user exists wth given username ? */
-        const user = await userRepository.findOneBy('username', req.body.username)
-        if (!user) {
-            return UnprocessableEntity(res, new FormError('username', ErrorKeys.username_not_found))
-        }
-
-        /** If a user exists, is the password correct ? */
-        const isValidPassword = await Utils.validateBcrypt(req.body.password, user.password)
-        if (!isValidPassword) {
-            return UnprocessableEntity(res, new FormError('password', ErrorKeys.password_not_match))
-        }
-
-        return Ok(res, {
-            user: { ...user, password: null },
-            token: Utils.generateJwtToken({ id: user.id }),
-        })
+        const { username, password } = req.body
+        const response = await authService.login(username, password)
+        return ServiceResponse(res, response)
     },
 
     async create(req: Request, res: Response) {
-        const errors = []
-        /** Is the username already taken ? */
-        const username = await userRepository.exists('username', req.body.username)
-        if (username) {
-            errors.push(new FormError('username', ErrorKeys.username_alredy_in_use))
-        }
-
-        /** Is the email already taken ? */
-        const email = await userRepository.exists('email', req.body.email)
-        if (email) {
-            errors.push(new FormError('email', ErrorKeys.email_alredy_in_use))
-        }
-
-        if (errors.length > 0) {
-            return UnprocessableEntity(res, errors)
-        }
-
-        const user = {
-            username: req.body.username,
-            email: req.body.email,
-            password: await Utils.crypt(req.body.password),
-        }
-
-        /** Insert user and returns data with JWT token */
-        return userRepository.create(user).then((inserted) => {
-            return Ok(
-                res,
-                {
-                    user: { ...inserted, password: null },
-                    token: Utils.generateJwtToken({ id: inserted.id }),
-                },
-                201,
-            )
-        })
+        const { username, password, email } = req.body
+        const response = await authService.create(username, password, email)
+        return ServiceResponse(res, response, 201)
     },
 
     async me(req: Request, res: Response) {
-        return Ok(res, { ...req.user, password: null })
+        return ServiceResponse(res, { ...req.user, password: undefined })
     },
 }
