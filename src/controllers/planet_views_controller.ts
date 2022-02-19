@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import pvRepository from '../repositories/planet_views_repository'
-import { Ok } from './controller'
+import service from '../services/planet_views_service'
+import { ServiceResponse } from './controller'
 
 export default {
     async updateOrCreate(req: Request, res: Response) {
-        return pvRepository
-            .upsert(parseInt(req.params.planet), req.user.id, req.ip)
-            .then((pv) => Ok(res, pv))
+        const { planet } = req.params
+        const response = await service.upsert(parseInt(planet), req.user.id, req.ip)
+        return ServiceResponse(res, response)
     },
 }

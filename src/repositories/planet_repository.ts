@@ -1,6 +1,8 @@
 import { planet } from '@prisma/client'
 import prisma from '../client'
 
+const findById = async (id: number) => prisma.planet.findUnique({ where: { id } })
+
 /**
  * Fetch planets and returns data with their galaxy
  */
@@ -23,6 +25,7 @@ const sortedBy = async (column: string): Promise<Array<planet>> => {
 }
 
 export default {
+    findById,
     findAll,
     sortedBy,
 }
