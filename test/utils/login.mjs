@@ -1,4 +1,4 @@
-import http from './http'
+import http from './http.mjs'
 
 const login = async () => {
     const response = await http.post('/auth/login', {

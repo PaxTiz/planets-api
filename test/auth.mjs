@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import request from './utils/request'
+import request from './utils/request.mjs'
 
 const username = 'Test User'
 const email = 'test@test.com'
@@ -157,8 +157,8 @@ describe('Authentication endpoints', () => {
                 password,
             })
                 .then((res) => {
-                    expect(res.data.data.token).to.be.a('string')
-                    expect(res.data.data.user).to.be.a('object')
+                    expect(res.data.token).to.be.a('string')
+                    expect(res.data.user).to.be.a('object')
                     expect(res.status).to.be.equal(201)
                 })
                 .catch((err) => {
@@ -235,18 +235,21 @@ describe('Authentication endpoints', () => {
                     expect(res).to.be.equal(undefined)
                 })
                 .catch((err) => {
-                    expect(err).to.be.a('object')
-                    expect(err).to.has.property('message')
-                    expect(err.message).to.be.a('string')
-                    expect(err.message).to.be.equal('password_not_match')
+                    expect(err.errors).to.be.a('array')
+                    expect(err.errors).to.be.length(1)
+                    err.errors.forEach((e) => {
+                        expect(e).to.be.a('object')
+                        expect(e.param).to.be.equal('password')
+                        expect(e.msg).to.be.equal('password_not_match')
+                    })
                 })
         })
 
         it('should login with success', async () => {
             return request('post', '/auth/login', { username, password })
                 .then((res) => {
-                    expect(res.data.data.token).to.be.a('string')
-                    expect(res.data.data.user).to.be.a('object')
+                    expect(res.data.token).to.be.a('string')
+                    expect(res.data.user).to.be.a('object')
                     expect(res.status).to.be.equal(200)
                 })
                 .catch((err) => {

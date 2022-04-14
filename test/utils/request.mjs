@@ -1,5 +1,5 @@
-import http from './http'
-import login from './login'
+import http from './http.mjs'
+import login from './login.mjs'
 
 const request = async (method, url, body, auth) => {
     method = method.toLowerCase()
