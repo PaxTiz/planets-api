@@ -7,12 +7,13 @@
     "dev": "nodemon app.ts",
     "build": "tsc",
     "start": "NODE_ENV=production node ./dist/app.js",
-    "migrate": "npx prisma migrate dev && npx prisma generate",
-    "seed": "npx prisma db seed",
-    "pull": "npx prisma db pull",
-    "test": "./node_modules/mocha/bin/mocha",
+    "prisma:migrate": "npx prisma migrate dev && npx prisma generate",
+    "prisma:generate": "npx prisma generate",
+    "prisma:seed": "npx prisma db seed",
+    "prisma:pull": "npx prisma db pull",
     "lint": "./node_modules/eslint/bin/eslint.js '*/**/*.{js,ts}' --quiet",
-    "lint:fix": "./node_modules/eslint/bin/eslint.js '*/**/*.{js,ts}' --quiet --fix"
+    "lint:fix": "./node_modules/eslint/bin/eslint.js '*/**/*.{js,ts}' --quiet --fix",
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
