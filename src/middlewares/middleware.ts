@@ -6,7 +6,6 @@ import { extname } from 'path'
 import { Unauthenticated } from '../controllers/controller'
 import userService from '../services/users_service'
 import Utils from '../utils/crypt'
-import ErrorKeys from '../utils/error_keys'
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -105,14 +104,6 @@ export const file = (options: FileUploadOptions) => {
 }
 
 export const applyCommonFilters = [
-    query('limit')
-        .optional()
-        .isInt({ min: 0 })
-        .withMessage(ErrorKeys.limit_is_not_a_valid_number)
-        .toInt(),
-    query('offset')
-        .optional()
-        .isInt({ min: 0 })
-        .withMessage(ErrorKeys.offset_is_not_a_valid_number)
-        .toInt(),
+    query('limit').optional().isInt({ min: 0 }).toInt(),
+    query('offset').optional().isInt({ min: 0 }).toInt(),
 ]

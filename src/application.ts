@@ -6,7 +6,6 @@ import { readdirSync } from 'fs'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import { join } from 'path'
-import ErrorKeys from './utils/error_keys'
 import Logger from './utils/logger'
 
 interface ApplicationInitializer {
@@ -77,7 +76,7 @@ export default class Application {
 
     private initNotFoundHandler() {
         this.app.get('*', (req: Request, res: Response) => {
-            return res.status(404).json({ message: ErrorKeys.not_found })
+            return res.status(404).json({ message: 'not_found' })
         })
     }
 
@@ -85,10 +84,10 @@ export default class Application {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
             if (err instanceof Error && err.name === 'NotFoundError') {
-                return res.status(404).json({ message: ErrorKeys.not_found })
+                return res.status(404).json({ message: 'not_found' })
             } else {
                 Logger.error(err)
-                return res.status(500).json({ message: ErrorKeys.server_error })
+                return res.status(500).json({ message: 'server_error' })
             }
         })
     }

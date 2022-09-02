@@ -1,5 +1,3 @@
-import ErrorKeys from './error_keys'
-
 /**
  * This class is intended to be used for create
  * form errors and returns formatted JSON responses
@@ -14,9 +12,9 @@ export default class FormError {
     /**
      * Message to display to the user
      */
-    msg: ErrorKeys
+    msg: string
 
-    constructor(param: string, message: ErrorKeys) {
+    constructor(param: string, message: string) {
         this.param = param
         this.msg = message
     }

@@ -1,5 +1,4 @@
 import { Response } from 'express'
-import ErrorKey from '../utils/error_keys'
 import FormError from '../utils/form_error'
 
 /**
@@ -23,7 +22,7 @@ export function Ok(res: Response, data: unknown, status = 200) {
  * @param message a key representing what is invalid
  * @returns response with 400 status code and formatted error
  */
-export function BadRequest(res: Response, message: ErrorKey) {
+export function BadRequest(res: Response, message: string) {
     return res.status(400).json({ message })
 }
 
@@ -36,7 +35,7 @@ export function BadRequest(res: Response, message: ErrorKey) {
  * @returns response with 401 status code and formatted error
  */
 export function Unauthenticated(res: Response) {
-    return res.status(401).json({ message: ErrorKey.unauthenticated })
+    return res.status(401).json({ message: 'unauthenticated' })
 }
 
 /**
@@ -48,7 +47,7 @@ export function Unauthenticated(res: Response) {
  * @returns response with 401 status code and formatted error
  */
 export function Forbidden(res: Response) {
-    return res.status(403).json({ message: ErrorKey.forbidden })
+    return res.status(403).json({ message: 'forbidden' })
 }
 
 /**
@@ -59,7 +58,7 @@ export function Forbidden(res: Response) {
  * @returns response with 404 status code and formatted error
  */
 export function NotFound(res: Response) {
-    return res.status(404).json({ message: ErrorKey.not_found })
+    return res.status(404).json({ message: 'not_found' })
 }
 
 /**
@@ -86,7 +85,7 @@ export function UnprocessableEntity(res: Response, errors: Array<FormError> | Fo
  * @returns response with 500 status code and formatted error
  */
 export function InternalServerError(res: Response): Response {
-    return res.status(500).json({ message: ErrorKey.server_error })
+    return res.status(500).json({ message: 'server_error' })
 }
 
 export function ServiceResponse(res: Response, data: unknown, status = 200) {
@@ -95,7 +94,7 @@ export function ServiceResponse(res: Response, data: unknown, status = 200) {
     }
     if (
         data instanceof FormError ||
-        (Array.isArray(data) && data.every((e) => e instanceof FormError))
+        (Array.isArray(data) && data.every((e) => e instanceof FormError) && data.length > 0)
     ) {
         return UnprocessableEntity(res, data)
     }

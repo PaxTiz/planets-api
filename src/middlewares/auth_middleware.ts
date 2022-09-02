@@ -1,28 +1,13 @@
 import { body } from 'express-validator'
-import ErrorKeys from '../utils/error_keys'
 import { isAuth, validate } from './middleware'
 
 export default {
-    login: [
-        body('username').isString().withMessage(ErrorKeys.username_required).trim(),
-        body('password').isString().withMessage(ErrorKeys.password_required).trim(),
-        validate,
-    ],
+    login: [body('username').isString().trim(), body('password').isString().trim(), validate],
 
     create: [
-        body('username')
-            .isString()
-            .withMessage(ErrorKeys.username_required)
-            .isLength({ min: 4, max: 20 })
-            .withMessage(ErrorKeys.username_bad_length)
-            .trim(),
-        body('email').isEmail().withMessage(ErrorKeys.email_invalid).trim(),
-        body('password')
-            .isString()
-            .withMessage(ErrorKeys.password_required)
-            .isLength({ min: 8 })
-            .withMessage(ErrorKeys.password_too_small)
-            .trim(),
+        body('username').isString().isLength({ min: 4, max: 20 }).trim(),
+        body('email').isEmail().trim(),
+        body('password').isString().isLength({ min: 8 }).trim(),
         validate,
     ],
 
