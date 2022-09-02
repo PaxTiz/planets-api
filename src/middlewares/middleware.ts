@@ -2,7 +2,7 @@ import { user as User } from '@prisma/client'
 import { NextFunction, Request, Response } from 'express'
 import { query, validationResult } from 'express-validator'
 import { Unauthenticated } from '../controllers/controller'
-import userRepository from '../repositories/user_repository'
+import userService from '../services/users_service'
 import Utils from '../utils/crypt'
 import ErrorKeys from '../utils/error_keys'
 
@@ -46,7 +46,7 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
         return Unauthenticated(res)
     }
 
-    const fromDb = await userRepository.findOneBy('id', user.id)
+    const fromDb = await userService.findOneBy('id', user.id)
     if (!fromDb) {
         return Unauthenticated(res)
     }

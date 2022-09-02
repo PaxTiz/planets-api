@@ -1,7 +1,13 @@
-import repository from '../repositories/planet_repository'
+import prisma from '../client'
 
 export default {
+    findById(id: number) {
+        return prisma.planet.findUnique({ where: { id } })
+    },
+
     async findAll(includeGalaxy: boolean) {
-        return repository.findAll(includeGalaxy)
+        return prisma.planet.findMany({
+            include: { galaxy: includeGalaxy },
+        })
     },
 }

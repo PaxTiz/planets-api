@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import quizzRepository from '../repositories/quizz_repository'
+import quizzRepository from '../services/quizz_service'
 import { Ok } from './controller'
 
 export default {
