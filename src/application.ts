@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-import * as Tracing from '@sentry/tracing'
 import compression from 'compression'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -24,7 +22,6 @@ export default class Application {
         this.isDevelopment = process.env.APP_ENV === 'development'
 
         this.app = express()
-        this.initSentry()
         this.initMiddlewares()
         this.initRoutes()
         this.initNotFoundHandler()
@@ -33,27 +30,6 @@ export default class Application {
 
     private initDotenv(path: string) {
         dotenv.config({ path })
-    }
-
-    private initSentry() {
-        Sentry.init({
-            dsn: process.env.SENTRY_URL,
-            integrations: [
-                new Sentry.Integrations.Http({ tracing: true }),
-                new Tracing.Integrations.Express({ app: this.app }),
-            ],
-            tracesSampleRate: 1.0,
-            debug: this.isDevelopment,
-            environment: process.env.APP_ENV,
-            attachStacktrace: true,
-            autoSessionTracking: true,
-        })
-        this.app.use(
-            Sentry.Handlers.requestHandler({
-                user: ['id', 'username', 'email', 'roleId'],
-            }),
-        )
-        this.app.use(Sentry.Handlers.tracingHandler())
     }
 
     private initMiddlewares() {
