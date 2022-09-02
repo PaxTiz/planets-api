@@ -1,4 +1,5 @@
 import compression from 'compression'
+import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import express, { Express, NextFunction, Request, Response } from 'express'
 import { readdirSync } from 'fs'
@@ -38,6 +39,7 @@ export default class Application {
 
         this.app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
         this.app.use(compression())
+        this.app.use(cookieParser())
         this.app.use(express.urlencoded({ extended: false }))
         this.app.use(express.json())
 
