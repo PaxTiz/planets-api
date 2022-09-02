@@ -21,7 +21,7 @@ export default class Utils {
      * @returns true if value and hash are equals, or false
      */
     static async validateBcrypt(value: string, hash: string): Promise<boolean> {
-        return await bcrypt.compare(value, hash)
+        return bcrypt.compare(value, hash)
     }
 
     /**

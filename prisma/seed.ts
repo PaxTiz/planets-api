@@ -19,7 +19,7 @@ const truncate = async () => {
 }
 
 const seed = async () => {
-    return await truncate().then(async () => {
+    return truncate().then(async () => {
         Logger.info('Create constellations')
         await client.constellation.create({
             data: {
