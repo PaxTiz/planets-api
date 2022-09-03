@@ -1,0 +1,24 @@
+-- AlterTable
+ALTER TABLE `BlackHole` MODIFY `name` VARCHAR(255) NOT NULL,
+    MODIFY `description` VARCHAR(255) NOT NULL,
+    MODIFY `image` VARCHAR(255) NOT NULL;
+
+-- AlterTable
+ALTER TABLE `Galaxy` MODIFY `name` VARCHAR(255) NOT NULL,
+    MODIFY `description` VARCHAR(255) NOT NULL,
+    MODIFY `image` VARCHAR(255) NOT NULL;
+
+-- AlterTable
+ALTER TABLE `Moon` MODIFY `name` VARCHAR(255) NOT NULL,
+    MODIFY `description` VARCHAR(255) NOT NULL,
+    MODIFY `image` VARCHAR(255) NOT NULL;
+
+-- AlterTable
+ALTER TABLE `Planet` MODIFY `name` VARCHAR(255) NOT NULL,
+    MODIFY `description` VARCHAR(255) NOT NULL,
+    MODIFY `image` VARCHAR(255) NOT NULL;
+
+-- AlterTable
+ALTER TABLE `Satelite` MODIFY `name` VARCHAR(255) NOT NULL,
+    MODIFY `description` VARCHAR(255) NOT NULL,
+    MODIFY `image` VARCHAR(255) NOT NULL;

@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -7,43 +8,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model constellation {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(100)
+model Galaxy {
+  id          String      @id @default(uuid())
+  name        String      @db.VarChar(255)
+  description String      @db.VarChar(255)
+  image       String      @db.VarChar(255)
+  userViews   Int         @default(0)
+  blackHole   BlackHole[]
+  planet      Planet[]
 }
 
-model galaxy {
-  id      Int      @id @default(autoincrement())
-  name    String   @db.VarChar(100)
-  planets planet[]
+model BlackHole {
+  id          String        @id @default(uuid())
+  name        String        @db.VarChar(255)
+  description String        @db.VarChar(255)
+  type        BlackHoleType
+  image       String        @db.VarChar(255)
+  userViews   Int           @default(0)
+  galaxyId    String        @db.VarChar(36)
+  galaxy      Galaxy        @relation(fields: [galaxyId], references: [id])
 }
 
-model planet {
-  id            Int            @id @default(autoincrement())
-  name          String         @db.VarChar(100)
-  description   String         @db.Text
-  image         String         @db.VarChar(255)
-  composition   String?        @db.LongText
-  galaxyId      Int
-  distance      Float          @default(0) @db.Float
-  distance_unit String         @default("km") @db.VarChar(3)
-  galaxy        galaxy         @relation(fields: [galaxyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7f8df2c355a7427e7df464808d3")
-  planet_views  planet_views[]
-
-  @@index([galaxyId], map: "FK_7f8df2c355a7427e7df464808d3")
+model Planet {
+  id          String     @id @default(uuid())
+  name        String     @db.VarChar(255)
+  description String     @db.VarChar(255)
+  image       String     @db.VarChar(255)
+  userViews   Int        @default(0)
+  galaxyId    String     @db.VarChar(36)
+  galaxy      Galaxy     @relation(fields: [galaxyId], references: [id])
+  moon        Moon?
+  satelite    Satelite[]
 }
 
-model planet_views {
-  id       Int    @id @default(autoincrement())
-  count    Int    @default(1)
-  ip       String @db.VarChar(255)
-  userId   Int?
-  planetId Int
-  planet   planet @relation(fields: [planetId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_e0d74f6c0015fbd543e80696380")
-  user     user?  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_d23280b8742bba5d43dffcd195b")
+model Moon {
+  id          String @id @default(uuid())
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+  image       String @db.VarChar(255)
+  userViews   Int    @default(0)
+  planetId    String @unique @db.VarChar(36)
+  planet      Planet @relation(fields: [planetId], references: [id])
+}
 
-  @@index([userId], map: "FK_d23280b8742bba5d43dffcd195b")
-  @@index([planetId], map: "FK_e0d74f6c0015fbd543e80696380")
+model Satelite {
+  id          String @id @default(uuid())
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+  image       String @db.VarChar(255)
+  userViews   Int    @default(0)
+  planetId    String @db.VarChar(36)
+  planet      Planet @relation(fields: [planetId], references: [id])
 }
 
 model role {
@@ -54,13 +69,12 @@ model role {
 }
 
 model user {
-  id           Int            @id @default(autoincrement())
-  username     String         @db.VarChar(255)
-  password     String         @db.VarChar(255)
-  email        String         @db.VarChar(255)
-  roleId       Int
-  role         role           @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92194")
-  planet_views planet_views[]
+  id       Int    @id @default(autoincrement())
+  username String @db.VarChar(255)
+  password String @db.VarChar(255)
+  email    String @db.VarChar(255)
+  roleId   Int
+  role     role   @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92194")
 
   @@index([roleId], map: "FK_c28e52f758e7bbc53828db92194")
 }
@@ -81,16 +95,23 @@ model quizz {
 }
 
 model quizz_questions {
-  id       Int                  @id @default(autoincrement())
-  type     quizz_questions_type @default(text)
-  question String               @db.VarChar(255)
+  id       Int               @id @default(autoincrement())
+  type     QuizzQuestionType @default(text)
+  question String            @db.VarChar(255)
   anwsers  Json
   quizzId  Int
-  quizz    quizz?               @relation(fields: [quizzId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92196")
+  quizz    quizz?            @relation(fields: [quizzId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c28e52f758e7bbc53828db92196")
 }
 
-enum quizz_questions_type {
+enum QuizzQuestionType {
   text
   text_multiple
   image_multiple
+}
+
+enum BlackHoleType {
+  stellar
+  supermassive
+  intermediate
+  primordial
 }
